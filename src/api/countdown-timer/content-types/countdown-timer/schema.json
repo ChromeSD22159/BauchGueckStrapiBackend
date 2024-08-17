@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "countdown_timers",
+  "info": {
+    "singularName": "countdown-timer",
+    "pluralName": "countdown-timers",
+    "displayName": "CountdownTimer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "timerId": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "biginteger"
+    },
+    "startDate": {
+      "type": "biginteger"
+    },
+    "endDate": {
+      "type": "biginteger"
+    },
+    "timerState": {
+      "type": "string"
+    },
+    "showActivity": {
+      "type": "boolean"
+    }
+  }
+}

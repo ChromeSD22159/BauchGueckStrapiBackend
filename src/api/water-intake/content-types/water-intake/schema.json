@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "water_intakes",
+  "info": {
+    "singularName": "water-intake",
+    "pluralName": "water-intakes",
+    "displayName": "WaterIntake",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userId": {
+      "type": "string"
+    },
+    "value": {
+      "type": "biginteger"
+    }
+  }
+}

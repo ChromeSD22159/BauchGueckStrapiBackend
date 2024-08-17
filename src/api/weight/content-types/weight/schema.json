@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "weights",
+  "info": {
+    "singularName": "weight",
+    "pluralName": "weights",
+    "displayName": "Weight",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userId": {
+      "type": "string"
+    },
+    "value": {
+      "type": "decimal"
+    }
+  }
+}

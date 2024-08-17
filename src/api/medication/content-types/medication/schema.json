@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "medications",
+  "info": {
+    "singularName": "medication",
+    "pluralName": "medications",
+    "displayName": "Medication",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "dosage": {
+      "type": "string"
+    },
+    "intakeTimes": {
+      "type": "string"
+    },
+    "medication_plan": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::medication-plan.medication-plan",
+      "mappedBy": "medications"
+    }
+  }
+}
