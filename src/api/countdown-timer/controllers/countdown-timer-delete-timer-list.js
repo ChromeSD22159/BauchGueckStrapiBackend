@@ -21,5 +21,20 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
           } catch (error) {
             ctx.throw(500, 'An error occurred while deleting timers');
           }
+    },
+    async getTimerListByUserId(ctx) {
+        try {
+            const userId = ctx.query.userId;
+
+            const timers = await strapi.entityService.findMany('api::countdown-timer.countdown-timer', {
+                filters: {
+                  userId: userId 
+                }
+              });
+          
+              ctx.body = timers; 
+        } catch (error) {
+            ctx.throw(500, 'An error occurred while deleting timers');
+        }
     }
   }));

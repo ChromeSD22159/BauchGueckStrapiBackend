@@ -25,6 +25,14 @@ module.exports = {
             config: {
                 policies: []
             }
+        },
+        {
+            method: 'GET',
+            path: '/countdown-timers/timer-list',
+            handler: 'countdown-timer-delete-timer-list.getTimerListByUserId',
+            config: {
+                policies: []
+            }
         }
     ]
 }

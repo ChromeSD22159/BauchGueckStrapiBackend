@@ -34,7 +34,9 @@
       "type": "string"
     },
     "showActivity": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }

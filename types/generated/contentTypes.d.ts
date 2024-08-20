@@ -807,7 +807,9 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
     startDate: Attribute.BigInteger;
     endDate: Attribute.BigInteger;
     timerState: Attribute.String;
-    showActivity: Attribute.Boolean;
+    showActivity: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
