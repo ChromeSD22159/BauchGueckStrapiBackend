@@ -56,7 +56,7 @@ module.exports = {
 
 
         {
-            method: 'PUT',
+            method: 'POST',
             path: '/countdown-timers/update-or-insert',
             handler: 'custom-countdown-timer.updateOrInsert',
             config: {
@@ -64,9 +64,9 @@ module.exports = {
             }
         },
         {
-            method: 'DELETE',
+            method: 'POST',
             path: '/countdown-timers/delete-timer-list',
-            handler: 'custom-countdown-timer.deleteTimerList',
+            handler: 'custom-countdown-timer.softDeleteTimer',
             config: {
                 policies: []
             }
@@ -79,6 +79,14 @@ module.exports = {
                 policies: []
             }
         },
+        {
+            method: "POST",
+            path: "/timer-list/sync",
+            handler: "custom-countdown-timer.sync",
+            config: {
+                policies: []
+            }
+        }
     ]
 }
 
