@@ -37,6 +37,11 @@
       "type": "boolean",
       "default": true,
       "required": true
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }
