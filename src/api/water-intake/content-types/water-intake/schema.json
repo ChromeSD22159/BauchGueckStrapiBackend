@@ -17,6 +17,11 @@
     },
     "value": {
       "type": "biginteger"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }

@@ -945,6 +945,7 @@ export interface ApiWeightWeight extends Schema.CollectionType {
   attributes: {
     userId: Attribute.String;
     value: Attribute.Decimal;
+    weightId: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

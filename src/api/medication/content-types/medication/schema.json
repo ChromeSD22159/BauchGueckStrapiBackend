@@ -29,6 +29,11 @@
       "relation": "oneToOne",
       "target": "api::medication-plan.medication-plan",
       "mappedBy": "medications"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }

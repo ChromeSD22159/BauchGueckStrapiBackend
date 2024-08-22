@@ -17,6 +17,14 @@
     },
     "value": {
       "type": "decimal"
+    },
+    "weightId": {
+      "type": "string"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }
