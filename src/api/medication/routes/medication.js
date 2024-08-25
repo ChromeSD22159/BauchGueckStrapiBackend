@@ -81,7 +81,7 @@ module.exports = {
         },
         {
             method: "POST",
-            path: "/medications/updateRemoteData",
+            path: "/medication/updateRemoteData",
             handler: "custom-medications.updateRemoteData",
             config: {
                 policies: []
@@ -89,7 +89,7 @@ module.exports = {
         },
         {
             method: "GET",
-            path: "/medications/fetchMedicationsAfterTimeStamp",
+            path: "/medication/fetchMedicationsAfterTimeStamp",
             handler: "custom-medications.fetchMedicationsAfterTimeStamp",
             config: {
                 policies: []

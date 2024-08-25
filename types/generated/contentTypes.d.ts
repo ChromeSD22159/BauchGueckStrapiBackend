@@ -873,6 +873,36 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
   };
 }
 
+export interface ApiTimeStampTimeStamp extends Schema.SingleType {
+  collectionName: 'time_stamps';
+  info: {
+    singularName: 'time-stamp';
+    pluralName: 'time-stamps';
+    displayName: 'TimeStamp';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    stamp: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::time-stamp.time-stamp',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::time-stamp.time-stamp',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiWaterIntakeWaterIntake extends Schema.CollectionType {
   collectionName: 'water_intakes';
   info: {
@@ -965,6 +995,7 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
       'api::medication.medication': ApiMedicationMedication;
+      'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;
       'api::weight.weight': ApiWeightWeight;
     }

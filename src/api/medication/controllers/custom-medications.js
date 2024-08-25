@@ -145,31 +145,33 @@ module.exports = createCoreController('api::medication.medication', ({ strapi })
         deletedMedications: deletedMedications
       });
     },
-  
+
     async fetchMedicationsAfterTimeStamp(ctx) {
       try {
         const userId = userIdToString(ctx.query.userId);
         const timeStamp = stringToInteger(ctx.query.timeStamp);
-  
-        const medications = await strapi.entityService.findMany('api::medication.medication', {
-          filters: {
+
+        let filter = {
             userId: { $eq: userId },
             updatedAtOnDevice: { $gt: timeStamp }
-          },
+        }
+    
+        const weights = await strapi.entityService.findMany('api::medication.medication', {
+          filters: filter,
         });
-  
-        if (medications.length === 0) {
+    
+        if (weights.length === 0) {
           ctx.body = [];
         } else {
-          ctx.body = medications;
+          ctx.body = weights;
         }
       } catch (error) {
-        strapi.log.error('Error fetching medications:', error);
-        ctx.status = 500;
-        ctx.body = { error: 'An error occurred while fetching medications' };
+            strapi.log.error('Error fetching weights:', error);
+            ctx.status = 500;
+            ctx.body = { error: 'An error occurred while fetching weights' };
       }
-    }
-  }));
+    },
+}));
   
   function stringToInteger(str) {
     try {

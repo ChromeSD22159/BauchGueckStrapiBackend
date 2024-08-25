@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "time_stamps",
+  "info": {
+    "singularName": "time-stamp",
+    "pluralName": "time-stamps",
+    "displayName": "TimeStamp"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "stamp": {
+      "type": "json"
+    }
+  }
+}

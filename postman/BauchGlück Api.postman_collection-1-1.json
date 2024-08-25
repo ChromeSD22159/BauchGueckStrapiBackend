@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "5fb9d74a-ca6b-49f5-818d-8806bdbe42e6",
+		"name": "BauchGlück Api",
+		"description": "This document describes the different routes of the BauchGlückApi and how they can be tested with Postman. Additionally, it explains how two environment variables can be set up to switch between the local development environment and the live environment.\n\n1. **KTOR LOCAL**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `http://localhost:8080` (Customize to your local URL)\n        \n    - **Current Value**: `http://localhost:8080`\n        \n2. **KTOR ProthesenApi Live**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`\n        \n    - **Current Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "12938676"
+	},
+	"item": [
+		{
+			"name": "CountdownTimer",
+			"item": [
+				{
+					"name": "Delete Multable Timer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n   {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/countdown-timers/delete-timer-list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"countdown-timers",
+								"delete-timer-list"
+							],
+							"query": [
+								{
+									"key": "timers",
+									"value": "12,23,34",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CountdownTimerList by UserId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/timer-list?userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timer-list"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}",
+									"description": "Frederik`s uid"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "InsertOrUpdate Timer by List",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/api/countdown-timers/update-or-insert"
+					},
+					"response": []
+				},
+				{
+					"name": "fetchTimersAfterTimeStamp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/timer/fetchTimersAfterTimeStamp?timeStamp=1724586143893&userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timer",
+								"fetchTimersAfterTimeStamp"
+							],
+							"query": [
+								{
+									"key": "timeStamp",
+									"value": "1724586143893"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Weight",
+			"item": [
+				{
+					"name": "GetWeightbyUserId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/weights-list?userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"weights-list"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}",
+									"description": "Frederik`s uid"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchWeightAfterTimeStamp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>User ID</th>",
+									"        <th>Value</th>",
+									"        <th>Created At</th>",
+									"        <th>Updated At</th>",
+									"        <th>Weight ID</th>",
+									"        <th>Is Deleted</th>",
+									"        <th>Updated At On Device</th>",
+									"    </tr>",
+									"    ",
+									"    {{#each response}}",
+									"        <tr id=row_{{@key}}>",
+									"            <td>{{id}}</td>",
+									"            <td>{{userId}}</td>",
+									"            <td>{{value}}</td>",
+									"            <td>{{createdAt}}</td>",
+									"            <td>{{updatedAt}}</td>",
+									"            <td>{{weightId}}</td>",
+									"            <td>{{isDeleted}}</td>",
+									"            <td>{{updatedAtOnDevice}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()}",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"protocolVersion": "auto"
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/weight/fetchWeightsAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"weight",
+								"fetchWeightsAfterTimeStamp"
+							],
+							"query": [
+								{
+									"key": "timeStamp",
+									"value": "1714609614186"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								},
+								{
+									"key": "timeStamp",
+									"value": "0",
+									"description": "Test Route",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Medication",
+			"item": [
+				{
+					"name": "fetchMedicationsAfterTimeStamp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/medication/fetchMedicationsAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"medication",
+								"fetchMedicationsAfterTimeStamp"
+							],
+							"query": [
+								{
+									"key": "timeStamp",
+									"value": "1714609614186"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "WaterIntake",
+			"item": [
+				{
+					"name": "fetchWaterIntakesAfterTimeStamp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/water-intake/fetchWaterIntakesAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"water-intake",
+								"fetchWaterIntakesAfterTimeStamp"
+							],
+							"query": [
+								{
+									"key": "timeStamp",
+									"value": "1714609614186"
+								},
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CurrentTimeStamp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/api/currentTimeStamp"
+			},
+			"response": []
+		}
+	]
+}

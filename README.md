@@ -32,30 +32,34 @@ npm run build
 yarn build
 ```
 
-## ⚙️ Deployment
+## ⚙️ Instructions for using the Postman Collection
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+This Postman Collection contains API requests for interacting with the BauchGlück backend. Before you can execute the requests, you must configure the required environment variables.
 
-```
-yarn strapi deploy
-```
 
-## 📚 Learn more
+#### Environment variables
+1. `base_url`
+- Provide the base URL of your Strapi backend.
+- Example: http://localhost:1337 (for local development) or https://api.frederikkohler.de/bauchglueck (for production).
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+2. `userId`
+- Setzen Sie dies auf die eindeutige ID des Benutzers, für den Sie Anfragen durchführen möchten.
 
-## ✨ Community
+#### Environment variable setup
+1. Click the eye icon in the top right corner of Postman to open the Environments pane.
+2. Click “Create New Environment.”
+3. Enter a name for your environment (e.g. "Development" or "Production").
+4. Add the following variables:
+    - Variable: base_url
+    - Initial Value: http://localhost:1337 (or your equivalent base URL)
+    - Variable: userId
+    - Initial Value: your_user_id
+5. Save the environment.
+6. Select the newly created environment from the drop-down menu in the Environments section.
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+#### Execute the requests
+- Select the desired request from the collection.
+- Check that the request uses the correct environment variables (e.g. {{base_url}}/api/endpoint).
+- Click "Send" to complete the request.
+- Review the response at the bottom to ensure the request was successful and the expected data was returned.
