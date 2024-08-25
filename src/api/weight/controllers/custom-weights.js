@@ -159,9 +159,13 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
         });
   
         if (weights.length === 0) {
-          ctx.body = [];
+          ctx.status = 404;
+          ctx.body = { 
+              error: 'No data to sync', 
+              message: 'No weights found after the specified timestamp' 
+          };
         } else {
-          ctx.body = weights;
+            ctx.body = weights;
         }
       } catch (error) {
         strapi.log.error('Error fetching weights:', error);

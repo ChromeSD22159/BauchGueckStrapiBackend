@@ -177,17 +177,19 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
             const timers = await strapi.entityService.findMany('api::countdown-timer.countdown-timer', {
                 filters: {
                     userId: { $eq: userId },
-                    updatedAtOnDevice: { $gt: timeStamp}
+                    updatedAtOnDevice: { $gte: timeStamp}
                 },
             });
       
             if (timers.length === 0) {
-                ctx.body = [];
+                ctx.status = 404;
+                ctx.body = { 
+                    error: 'No data to sync', 
+                    message: 'No timer found after the specified timestamp' 
+                };
             } else {
                 ctx.body = timers;
             }
-
-            //ctx.body = timers;
         } catch (error) {
             strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);
         }

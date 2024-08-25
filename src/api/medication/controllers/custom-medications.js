@@ -156,19 +156,23 @@ module.exports = createCoreController('api::medication.medication', ({ strapi })
             updatedAtOnDevice: { $gt: timeStamp }
         }
     
-        const weights = await strapi.entityService.findMany('api::medication.medication', {
+        const medications = await strapi.entityService.findMany('api::medication.medication', {
           filters: filter,
         });
     
-        if (weights.length === 0) {
-          ctx.body = [];
+        if (medications.length === 0) {
+            ctx.status = 404;
+            ctx.body = { 
+                error: 'No data to sync', 
+                message: 'No medication found after the specified timestamp' 
+            };
         } else {
-          ctx.body = weights;
+            ctx.body = medications;
         }
       } catch (error) {
-            strapi.log.error('Error fetching weights:', error);
+            strapi.log.error('Error fetching medications:', error);
             ctx.status = 500;
-            ctx.body = { error: 'An error occurred while fetching weights' };
+            ctx.body = { error: 'An error occurred while fetching medications' };
       }
     },
 }));

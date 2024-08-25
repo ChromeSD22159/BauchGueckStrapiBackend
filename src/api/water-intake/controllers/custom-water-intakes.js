@@ -159,9 +159,13 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
         });
   
         if (waterIntakes.length === 0) {
-          ctx.body = [];
+            ctx.status = 404;
+            ctx.body = { 
+                error: 'No data to sync', 
+                message: 'No waterIntakes found after the specified timestamp' 
+            };
         } else {
-          ctx.body = waterIntakes;
+            ctx.body = waterIntakes;
         }
       } catch (error) {
         strapi.log.error('Error fetching water intakes:', error);
