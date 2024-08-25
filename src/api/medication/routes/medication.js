@@ -56,28 +56,44 @@ module.exports = {
 
 
         {
-            method: 'PUT',
-            path: '/medications/update-or-insert', 
-            handler: 'custom-medications.updateOrInsert', 
+            method: 'POST',
+            path: '/medications/update-or-insert',
+            handler: 'custom-medications.updateOrInsert',
             config: {
                 policies: []
             }
         },
         {
-            method: 'DELETE',
-            path: '/medications/delete-timer-list', 
-            handler: 'custom-medications.deleteMedications', 
+            method: 'POST',
+            path: '/medications/delete-medication-list',
+            handler: 'custom-medications.softDeleteMedication',
             config: {
                 policies: []
             }
         },
         {
             method: 'GET',
-            path: '/medications-list', 
-            handler: 'custom-medications.getListByUserId', 
+            path: '/medication-list',
+            handler: 'custom-medications.getMedicationListByUserId',
             config: {
                 policies: []
             }
         },
+        {
+            method: "POST",
+            path: "/medications/updateRemoteData",
+            handler: "custom-medications.updateRemoteData",
+            config: {
+                policies: []
+            }
+        },
+        {
+            method: "GET",
+            path: "/medications/fetchMedicationsAfterTimeStamp",
+            handler: "custom-medications.fetchMedicationsAfterTimeStamp",
+            config: {
+                policies: []
+            }
+        }
     ]
 }

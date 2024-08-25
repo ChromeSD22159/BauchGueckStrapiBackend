@@ -800,16 +800,24 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    timerId: Attribute.String;
-    userId: Attribute.String;
-    name: Attribute.String;
-    duration: Attribute.BigInteger;
+    timerId: Attribute.String & Attribute.Required;
+    userId: Attribute.String & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
+    duration: Attribute.BigInteger & Attribute.Required;
     startDate: Attribute.BigInteger;
     endDate: Attribute.BigInteger;
-    timerState: Attribute.String;
+    timerState: Attribute.Enumeration<
+      ['running', 'paused', 'completed', 'notRunning']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'notRunning'>;
     showActivity: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<true>;
+    isDeleted: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -841,13 +849,13 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
   attributes: {
     name: Attribute.String;
     userId: Attribute.String;
+    medicationId: Attribute.String;
     dosage: Attribute.String;
     intakeTimes: Attribute.String;
-    medication_plan: Attribute.Relation<
-      'api::medication.medication',
-      'oneToOne',
-      'api::medication-plan.medication-plan'
-    >;
+    isDeleted: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -858,41 +866,6 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::medication.medication',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiMedicationPlanMedicationPlan extends Schema.CollectionType {
-  collectionName: 'medication_plans';
-  info: {
-    singularName: 'medication-plan';
-    pluralName: 'medication-plans';
-    displayName: 'MedicationPlan';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    userId: Attribute.String;
-    medications: Attribute.Relation<
-      'api::medication-plan.medication-plan',
-      'oneToOne',
-      'api::medication.medication'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::medication-plan.medication-plan',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::medication-plan.medication-plan',
       'oneToOne',
       'admin::user'
     > &
@@ -913,7 +886,12 @@ export interface ApiWaterIntakeWaterIntake extends Schema.CollectionType {
   };
   attributes: {
     userId: Attribute.String;
+    waterIntakeId: Attribute.String;
     value: Attribute.BigInteger;
+    isDeleted: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -944,8 +922,12 @@ export interface ApiWeightWeight extends Schema.CollectionType {
   };
   attributes: {
     userId: Attribute.String;
-    value: Attribute.Decimal;
     weightId: Attribute.String;
+    value: Attribute.Decimal;
+    isDeleted: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -983,7 +965,6 @@ declare module '@strapi/types' {
       'plugin::i18n.locale': PluginI18NLocale;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
       'api::medication.medication': ApiMedicationMedication;
-      'api::medication-plan.medication-plan': ApiMedicationPlanMedicationPlan;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;
       'api::weight.weight': ApiWeightWeight;
     }

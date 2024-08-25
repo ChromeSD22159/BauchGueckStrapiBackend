@@ -65,7 +65,7 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
     
           const timers = await strapi.entityService.findMany('api::countdown-timer.countdown-timer', {
             filters: {
-              userId: userId,
+              userId: userIdToString(userId),
             },
           });
     
@@ -125,39 +125,38 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
 
     },
 
-    async sync(ctx) {
+    async updateRemoteData(ctx) {
         const timers = ctx.request.body;
-    
-        // Liste, um die Timer zu sammeln, die gelöscht wurden
+        
         const deletedTimers = [];
     
         for (const timer of timers) {
-            const { timerId, userId, updatedAt, isDeleted } = timer;
+            const { timerId, userId, updatedOnDevice, isDeleted } = timer;
     
             if (isDeleted) {
-                    // Lösche alle Einträge mit der passenden timerId und userId
-                    await strapi.db.query('api::customer.customer').delete({
-                    where: { timerId, userId }
-                    });
-            
                     // Füge den Timer zur Liste der gelöschten Einträge hinzu
                     deletedTimers.push({ timerId, userId });
+
+                    // Lösche alle Einträge mit der passenden timerId und userId
+                    await strapi.db.query('api::countdown-timer.countdown-timer').delete({
+                        where: { timerId, userId }
+                    });
             } else {
                     // Prüfe, ob es einen Eintrag mit der gegebenen timerId und userId gibt
-                    const existingEntry = await strapi.db.query('api::customer.customer').findOne({
+                    const existingEntry = await strapi.db.query('api::countdown-timer.countdown-timer').findOne({
                         where: { timerId, userId }
                     });
             
                     if (existingEntry) {
                         // Aktualisiere den bestehenden Eintrag
-                        await strapi.db.query('api::customer.customer').update({
+                        await strapi.db.query('api::countdown-timer.countdown-timer').update({
                             where: { id: existingEntry.id },
-                            data: { updatedAt }
+                            data: { updatedOnDevice }
                         });
                     } else {
                         // Erstelle einen neuen Eintrag
-                        await strapi.db.query('api::customer.customer').create({
-                            data: { timerId, userId, updatedAt, isDeleted }
+                        await strapi.db.query('api::countdown-timer.countdown-timer').create({
+                            data: { timerId, userId, updatedOnDevice, isDeleted }
                         });
                     }
             }
@@ -168,6 +167,58 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
             message: 'Sync completed successfully',
             deletedTimers: deletedTimers
         });
-      }
+    },
+
+    async fetchTimersAfterTimeStamp(ctx) {
+        try {
+            const userId = userIdToString(ctx.query.userId);
+            const timeStamp = stringToInteger(ctx.query.timeStamp);
+
+            const timers = await strapi.entityService.findMany('api::countdown-timer.countdown-timer', {
+                filters: {
+                    userId: { $eq: userId },
+                    updatedAtOnDevice: { $gt: timeStamp}
+                },
+            });
+      
+            if (timers.length === 0) {
+                ctx.body = [];
+            } else {
+                ctx.body = timers;
+            }
+
+            //ctx.body = timers;
+        } catch (error) {
+            strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);
+        }
+    }
 
   }));
+
+function stringToInteger(str) {
+    try {
+        if (/^-?\d+$/.test(str)) {
+            return parseInt(str)
+        } else {
+            throw new Error("Invalid input: not a valid integer representation");
+        }
+    } catch (error) {
+        console.error("Error converting string to BigInt:", error);
+        return null; 
+    }
+}
+
+function userIdToString(str) {
+    try {
+        return String(str)
+    } catch (error) {
+        console.error("Error converting string to BigInt:", error);
+        return null; 
+    }
+}
+
+function unixToISO(timestampString) {
+    const timestamp = parseInt(timestampString, 10);
+    const date = new Date(timestamp);
+    return date.toISOString(); 
+}

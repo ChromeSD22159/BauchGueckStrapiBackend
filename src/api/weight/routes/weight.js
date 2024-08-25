@@ -56,28 +56,44 @@ module.exports = {
 
 
         {
-            method: 'PUT',
-            path: '/weights/update-or-insert',
+            method: 'POST',
+            path: '/weight/update-or-insert',
             handler: 'custom-weights.updateOrInsert',
             config: {
                 policies: []
             }
         },
         {
-            method: 'DELETE',
-            path: '/weights/delete-timer-list',
-            handler: 'custom-weights.deleteWeights',
+            method: 'POST',
+            path: '/weight/delete-timer-list',
+            handler: 'custom-weights.softDeleteWeight',
             config: {
                 policies: []
             }
         },
         {
             method: 'GET',
-            path: '/weights-list',
-             handler: 'custom-weights.getListByUserId',
+            path: '/weight-list',
+            handler: 'custom-weights.getWeightListByUserId',
             config: {
                 policies: []
             }
         },
+        {
+            method: "POST",
+            path: "/weight/updateRemoteData",
+            handler: "custom-weights.updateRemoteData",
+            config: {
+                policies: []
+            }
+        },
+        {
+            method: "GET",
+            path: "/weight/fetchWeightsAfterTimeStamp",
+            handler: "custom-weights.fetchWeightsAfterTimeStamp",
+            config: {
+                policies: []
+            }
+        }
     ]
 }

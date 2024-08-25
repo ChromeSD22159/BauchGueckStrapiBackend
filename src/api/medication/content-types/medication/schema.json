@@ -18,21 +18,22 @@
     "userId": {
       "type": "string"
     },
+    "medicationId": {
+      "type": "string"
+    },
     "dosage": {
       "type": "string"
     },
     "intakeTimes": {
       "type": "string"
     },
-    "medication_plan": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::medication-plan.medication-plan",
-      "mappedBy": "medications"
-    },
     "isDeleted": {
       "type": "boolean",
       "default": false,
+      "required": true
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger",
       "required": true
     }
   }

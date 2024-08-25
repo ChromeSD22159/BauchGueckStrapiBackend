@@ -14,6 +14,9 @@
   "attributes": {
     "userId": {
       "type": "string"
+    }, 
+    "waterIntakeId": {
+      "type": "string"
     },
     "value": {
       "type": "biginteger"
@@ -21,6 +24,10 @@
     "isDeleted": {
       "type": "boolean",
       "default": false,
+      "required": true
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger",
       "required": true
     }
   }

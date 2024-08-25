@@ -56,28 +56,44 @@ module.exports = {
 
 
         {
-            method: 'PUT',
-            path: '/water-intakes/update-or-insert', 
-            handler: 'custom-water-intakes.updateOrInsert', 
+            method: 'POST',
+            path: '/water-intakes/update-or-insert',
+            handler: 'custom-water-intakes.updateOrInsert',
             config: {
                 policies: []
             }
         },
         {
-            method: 'DELETE',
-            path: '/water-intakes/delete-timer-list', 
-            handler: 'custom-water-intakes.deleteWaterIntakes', 
+            method: 'POST',
+            path: '/water-intakes/delete-timer-list',
+            handler: 'custom-water-intakes.softDeleteWaterIntake',
             config: {
                 policies: []
             }
         },
         {
             method: 'GET',
-            path: '/water-intakes-list', 
-            handler: 'custom-water-intakes.getListByUserId', 
+            path: '/water-intake-list',
+            handler: 'custom-water-intakes.getWaterIntakeListByUserId',
             config: {
                 policies: []
             }
         },
+        {
+            method: "POST",
+            path: "/water-intake/updateRemoteData",
+            handler: "custom-water-intakes.updateRemoteData",
+            config: {
+                policies: []
+            }
+        },
+        {
+            method: "GET",
+            path: "/water-intake/fetchWaterIntakesAfterTimeStamp",
+            handler: "custom-water-intakes.fetchWaterIntakesAfterTimeStamp",
+            config: {
+                policies: []
+            }
+        }
     ]
 }

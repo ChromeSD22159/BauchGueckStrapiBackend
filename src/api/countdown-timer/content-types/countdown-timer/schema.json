@@ -13,16 +13,20 @@
   "pluginOptions": {},
   "attributes": {
     "timerId": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "userId": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "duration": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "required": true
     },
     "startDate": {
       "type": "biginteger"
@@ -31,7 +35,15 @@
       "type": "biginteger"
     },
     "timerState": {
-      "type": "string"
+      "type": "enumeration",
+      "enum": [
+        "running",
+        "paused",
+        "completed",
+        "notRunning"
+      ],
+      "default": "notRunning",
+      "required": true
     },
     "showActivity": {
       "type": "boolean",
@@ -41,6 +53,10 @@
     "isDeleted": {
       "type": "boolean",
       "default": false,
+      "required": true
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger",
       "required": true
     }
   }

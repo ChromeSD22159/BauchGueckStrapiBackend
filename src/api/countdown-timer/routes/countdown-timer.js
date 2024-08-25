@@ -81,8 +81,16 @@ module.exports = {
         },
         {
             method: "POST",
-            path: "/timer-list/sync",
-            handler: "custom-countdown-timer.sync",
+            path: "/timer/updateRemoteData",
+            handler: "custom-countdown-timer.updateRemoteData",
+            config: {
+                policies: []
+            }
+        },
+        {
+            method: "GET",
+            path: "/timer/fetchTimersAfterTimeStamp",
+            handler: "custom-countdown-timer.fetchTimersAfterTimeStamp",
             config: {
                 policies: []
             }
