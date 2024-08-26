@@ -6,15 +6,13 @@
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::medication.medication');   
-
 module.exports = {
     routes: [
-        // Standard Routes (CRUD)
+        // STANDARD ROUTES (CRUD)
         {
             method: 'GET',
             path: '/medications',
-            handler: 'api::medication.medication.find', 
+            handler: 'api::medication.medication.find',
             config: {
                 policies: []
             }
@@ -22,7 +20,7 @@ module.exports = {
         {
             method: 'GET',
             path: '/medications/:id',
-            handler: 'api::medication.medication.findOne', 
+            handler: 'api::medication.medication.findOne',
             config: {
                 policies: []
             }
@@ -30,7 +28,7 @@ module.exports = {
         {
             method: 'POST',
             path: '/medications',
-            handler: 'api::medication.medication.create', 
+            handler: 'api::medication.medication.create',
             config: {
                 policies: []
             }
@@ -38,7 +36,7 @@ module.exports = {
         {
             method: 'PUT',
             path: '/medications/:id',
-            handler: 'api::medication.medication.update',  
+            handler: 'api::medication.medication.update',
             config: {
                 policies: []
             }
@@ -46,39 +44,16 @@ module.exports = {
         {
             method: 'DELETE',
             path: '/medications/:id',
-            handler: 'api::medication.medication.delete', 
+            handler: 'api::medication.medication.delete',
             config: {
                 policies: []
             }
         },
-        // END STANDARD
+        // END STANDARD ROUTES
 
 
 
-        {
-            method: 'POST',
-            path: '/medications/update-or-insert',
-            handler: 'custom-medications.updateOrInsert',
-            config: {
-                policies: []
-            }
-        },
-        {
-            method: 'POST',
-            path: '/medications/delete-medication-list',
-            handler: 'custom-medications.softDeleteMedication',
-            config: {
-                policies: []
-            }
-        },
-        {
-            method: 'GET',
-            path: '/medication-list',
-            handler: 'custom-medications.getMedicationListByUserId',
-            config: {
-                policies: []
-            }
-        },
+        // CUSTOM ROUTES
         {
             method: "POST",
             path: "/medication/updateRemoteData",
@@ -95,5 +70,6 @@ module.exports = {
                 policies: []
             }
         }
+      // END CUSTOM ROUTES
     ]
 }
