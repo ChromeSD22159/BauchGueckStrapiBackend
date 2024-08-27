@@ -11,8 +11,6 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
     async updateRemoteData(ctx) {
         const timers = ctx.request.body;
 
-        const deletedTimers = [];
-
         for (const timer of timers) {
 
             const { timerId, userId, isDeleted } = timer;
@@ -28,8 +26,6 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
                 await strapi.entityService.update('api::countdown-timer.countdown-timer', existingEntry.id, {
                   data: { isDeleted: true }
                 });
-
-                deletedTimers.push({ timerId, userId });
 
             } else {
                 // when Exists Update it else Insert it
@@ -52,12 +48,11 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
 
 
         ctx.send({
-            message: 'Sync completed successfully',
-            deletedTimers: deletedTimers
+            message: 'Sync completed successfully'
         });
     },
 
-    async fetchTimersAfterTimeStamp(ctx) {
+    async fetchItemsAfterTimeStamp(ctx) {
         try {
             const userId = userIdToString(ctx.query.userId);
             const timeStamp = stringToInteger(ctx.query.timeStamp);

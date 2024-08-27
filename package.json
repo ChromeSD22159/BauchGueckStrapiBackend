@@ -10,12 +10,13 @@
     "strapi": "strapi",
     "deploy": "strapi deploy"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.25.8",
-    "@strapi/plugin-users-permissions": "4.25.8",
-    "@strapi/plugin-i18n": "4.25.8",
+    "@bn-digital/strapi-plugin-field-uuid": "^1.2.12",
+    "@strapi/helper-plugin": "^4.25.8",
     "@strapi/plugin-cloud": "4.25.8",
+    "@strapi/plugin-i18n": "4.25.8",
+    "@strapi/plugin-users-permissions": "4.25.8",
+    "@strapi/strapi": "4.25.8",
     "better-sqlite3": "8.6.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

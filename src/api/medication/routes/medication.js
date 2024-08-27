@@ -64,7 +64,7 @@ module.exports = {
         },
         {
             method: "GET",
-            path: "/medication/fetchMedicationsAfterTimeStamp",
+            path: "/medication/fetchItemsAfterTimeStamp",
             handler: "custom-medications.fetchMedicationsAfterTimeStamp",
             config: {
                 policies: []

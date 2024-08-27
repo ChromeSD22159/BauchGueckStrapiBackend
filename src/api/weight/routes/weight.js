@@ -14,7 +14,7 @@ module.exports = {
          {
             method: 'GET',
             path: '/weights',
-            handler: 'api::weight.weight.find', 
+            handler: 'api::weight.weight.find',
             config: {
                 policies: []
             }
@@ -22,7 +22,7 @@ module.exports = {
         {
             method: 'GET',
             path: '/weights/:id',
-           handler: 'api::weight.weight.findOne', 
+           handler: 'api::weight.weight.findOne',
             config: {
                 policies: []
             }
@@ -30,7 +30,7 @@ module.exports = {
         {
             method: 'POST',
             path: '/weights',
-           handler: 'api::weight.weight.create', 
+           handler: 'api::weight.weight.create',
             config: {
                 policies: []
             }
@@ -38,7 +38,7 @@ module.exports = {
         {
             method: 'PUT',
             path: '/weights/:id',
-            handler: 'api::weight.weight.update',  
+            handler: 'api::weight.weight.update',
             config: {
                 policies: []
             }
@@ -46,7 +46,7 @@ module.exports = {
         {
             method: 'DELETE',
             path: '/weights/:id',
-            handler: 'api::weight.weight.delete', 
+            handler: 'api::weight.weight.delete',
             config: {
                 policies: []
             }
@@ -55,30 +55,6 @@ module.exports = {
 
 
 
-        {
-            method: 'POST',
-            path: '/weight/update-or-insert',
-            handler: 'custom-weights.updateOrInsert',
-            config: {
-                policies: []
-            }
-        },
-        {
-            method: 'POST',
-            path: '/weight/delete-timer-list',
-            handler: 'custom-weights.softDeleteWeight',
-            config: {
-                policies: []
-            }
-        },
-        {
-            method: 'GET',
-            path: '/weight-list',
-            handler: 'custom-weights.getWeightListByUserId',
-            config: {
-                policies: []
-            }
-        },
         {
             method: "POST",
             path: "/weight/updateRemoteData",
@@ -89,8 +65,8 @@ module.exports = {
         },
         {
             method: "GET",
-            path: "/weight/fetchWeightsAfterTimeStamp",
-            handler: "custom-weights.fetchWeightsAfterTimeStamp",
+            path: "/weight/fetchItemsAfterTimeStamp",
+            handler: "custom-weights.fetchItemsAfterTimeStamp",
             config: {
                 policies: []
             }

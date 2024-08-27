@@ -13,13 +13,16 @@
   "pluginOptions": {},
   "attributes": {
     "userId": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "weightId": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "value": {
-      "type": "decimal"
+      "type": "decimal",
+      "required": true
     },
     "isDeleted": {
       "type": "boolean",
@@ -28,6 +31,11 @@
     },
     "updatedAtOnDevice": {
       "type": "biginteger",
+      "required": true,
+      "default": "0"
+    },
+    "weighed": {
+      "type": "datetime",
       "required": true
     }
   }

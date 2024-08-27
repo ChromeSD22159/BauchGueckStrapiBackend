@@ -14,7 +14,7 @@ module.exports = {
         {
             method: 'GET',
             path: '/water-intakes',
-            handler: 'api::water-intake.water-intake.find', 
+            handler: 'api::water-intake.water-intake.find',
             config: {
                 policies: []
             }
@@ -22,7 +22,7 @@ module.exports = {
         {
             method: 'GET',
             path: '/water-intakes/:id',
-            handler: 'api::water-intake.water-intake.findOne', 
+            handler: 'api::water-intake.water-intake.findOne',
             config: {
                 policies: []
             }
@@ -30,7 +30,7 @@ module.exports = {
         {
             method: 'POST',
             path: '/water-intakes',
-            handler: 'api::water-intake.water-intake.create', 
+            handler: 'api::water-intake.water-intake.create',
             config: {
                 policies: []
             }
@@ -38,7 +38,7 @@ module.exports = {
         {
             method: 'PUT',
             path: '/water-intakes/:id',
-            handler: 'api::water-intake.water-intake.update',  
+            handler: 'api::water-intake.water-intake.update',
             config: {
                 policies: []
             }
@@ -46,7 +46,7 @@ module.exports = {
         {
             method: 'DELETE',
             path: '/water-intakes/:id',
-            handler: 'api::water-intake.water-intake.delete', 
+            handler: 'api::water-intake.water-intake.delete',
             config: {
                 policies: []
             }
@@ -89,7 +89,7 @@ module.exports = {
         },
         {
             method: "GET",
-            path: "/water-intake/fetchWaterIntakesAfterTimeStamp",
+            path: "/water-intake/fetchItemsAfterTimeStamp",
             handler: "custom-water-intakes.fetchWaterIntakesAfterTimeStamp",
             config: {
                 policies: []

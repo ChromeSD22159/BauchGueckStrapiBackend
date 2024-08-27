@@ -63,8 +63,8 @@ module.exports = {
         },
         {
             method: "GET",
-            path: "/timer/fetchTimersAfterTimeStamp",
-            handler: "custom-countdown-timer.fetchTimersAfterTimeStamp",
+            path: "/timer/fetchItemsAfterTimeStamp",
+            handler: "custom-countdown-timer.fetchItemsAfterTimeStamp",
             config: {
                 policies: []
             }

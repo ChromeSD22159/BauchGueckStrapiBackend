@@ -951,13 +951,16 @@ export interface ApiWeightWeight extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    userId: Attribute.String;
-    weightId: Attribute.String;
-    value: Attribute.Decimal;
+    userId: Attribute.String & Attribute.Required;
+    weightId: Attribute.String & Attribute.Required;
+    value: Attribute.Decimal & Attribute.Required;
     isDeleted: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<false>;
-    updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
+    updatedAtOnDevice: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.DefaultTo<'0'>;
+    weighed: Attribute.DateTime & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
