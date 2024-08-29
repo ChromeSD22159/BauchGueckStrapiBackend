@@ -5,15 +5,15 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
     async updateRemoteData(ctx) {
-      const timers = ctx.request.body;
+      const receivedWeights = ctx.request.body;
 
-      for (const timer of timers) {
+      for (const receivedWeight of receivedWeights) {
 
-        const { timerId, userId, isDeleted } = timer;
+        const { weightId, userId, isDeleted } = receivedWeight;
 
         // Check if Entry Exist
         const existingEntry = await strapi.db.query('api::weight.weight').findOne({
-          where: { timerId, userId }
+          where: { weightId, userId }
         });
 
         // when timer is SoftDeleted
@@ -29,14 +29,14 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
             await strapi.db.query('api::weight.weight').update({
               where: { id: existingEntry.id },
               data: {
-                ...timer,
+                ...receivedWeight,
                 id: existingEntry.id
               }
             });
           } else {
-            delete timer.id;
+            delete receivedWeight.id;
             await strapi.db.query('api::weight.weight').create({
-              data: timer
+              data: receivedWeight
             });
           }
         }
@@ -53,21 +53,21 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
         const userId = userIdToString(ctx.query.userId);
         const timeStamp = stringToInteger(ctx.query.timeStamp);
 
-        const timers = await strapi.entityService.findMany('api::weight.weight', {
+        const weights = await strapi.entityService.findMany('api::weight.weight', {
             filters: {
               userId: { $eq: userId },
               updatedAtOnDevice: { $gt: timeStamp}
             },
         });
 
-        if (timers.length === 0) {
-          ctx.status = 701;
+        if (weights.length === 0) {
+          ctx.status = 430;
           ctx.body = {
             error: 'No data to sync',
-            message: 'No timer found after the specified timestamp'
+            message: 'No Weights found after the specified timestamp'
           };
         } else {
-          ctx.body = timers;
+          ctx.body = weights;
         }
       } catch (error) {
         strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);

@@ -65,7 +65,7 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
             });
 
             if (timers.length === 0) {
-                ctx.status = 404;
+                ctx.status = 430;
                 ctx.body = {
                     error: 'No data to sync',
                     message: 'No timer found after the specified timestamp'
