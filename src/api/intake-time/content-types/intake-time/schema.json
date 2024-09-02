@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "intake_times",
+  "info": {
+    "singularName": "intake-time",
+    "pluralName": "intake-times",
+    "displayName": "IntakeTime",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "intakeTime": {
+      "type": "string"
+    },
+    "medication": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::medication.medication",
+      "inversedBy": "intake_times"
+    },
+    "intake_statuses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::intake-status.intake-status",
+      "mappedBy": "intake_time"
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger"
+    }
+  }
+}
