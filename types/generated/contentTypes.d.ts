@@ -835,6 +835,84 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
   };
 }
 
+export interface ApiIntakeStatusIntakeStatus extends Schema.CollectionType {
+  collectionName: 'intake_statuses';
+  info: {
+    singularName: 'intake-status';
+    pluralName: 'intake-statuses';
+    displayName: 'IntakeStatus';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    date: Attribute.DateTime;
+    isTaken: Attribute.Boolean;
+    updatedAtOnDevice: Attribute.BigInteger;
+    intake_time: Attribute.Relation<
+      'api::intake-status.intake-status',
+      'manyToOne',
+      'api::intake-time.intake-time'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::intake-status.intake-status',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::intake-status.intake-status',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiIntakeTimeIntakeTime extends Schema.CollectionType {
+  collectionName: 'intake_times';
+  info: {
+    singularName: 'intake-time';
+    pluralName: 'intake-times';
+    displayName: 'IntakeTime';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    intakeTime: Attribute.String;
+    medication: Attribute.Relation<
+      'api::intake-time.intake-time',
+      'manyToOne',
+      'api::medication.medication'
+    >;
+    intake_statuses: Attribute.Relation<
+      'api::intake-time.intake-time',
+      'oneToMany',
+      'api::intake-status.intake-status'
+    >;
+    updatedAtOnDevice: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::intake-time.intake-time',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::intake-time.intake-time',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMedicationMedication extends Schema.CollectionType {
   collectionName: 'medications';
   info: {
@@ -851,11 +929,15 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
     userId: Attribute.String;
     medicationId: Attribute.String;
     dosage: Attribute.String;
-    intakeTimes: Attribute.String;
     isDeleted: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<false>;
     updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
+    intake_times: Attribute.Relation<
+      'api::medication.medication',
+      'oneToMany',
+      'api::intake-time.intake-time'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -997,6 +1079,8 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
+      'api::intake-status.intake-status': ApiIntakeStatusIntakeStatus;
+      'api::intake-time.intake-time': ApiIntakeTimeIntakeTime;
       'api::medication.medication': ApiMedicationMedication;
       'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;
