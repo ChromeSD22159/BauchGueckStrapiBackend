@@ -1,8 +1,10 @@
-const stringToInteger = require('../../../utils/stringToInteger');
-const unixToISO = require('../../../utils/unixToISO');
-const userIdToString = require('../../../utils/userIdToString');
 const { createCoreController } = require('@strapi/strapi').factories;
-
+const {
+  stringToInteger,
+  userIdToString,
+  validateUserId,
+  validateTimerStamp
+} = require('../../../utils/validation');
 module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
     async updateRemoteData(ctx) {
       const receivedWeights = ctx.request.body;
@@ -50,8 +52,13 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
 
     async fetchItemsAfterTimeStamp(ctx) {
       try {
+        if (!validateUserId(ctx)) {
+          return;
+        }
+
         const userId = userIdToString(ctx.query.userId);
-        const timeStamp = stringToInteger(ctx.query.timeStamp);
+
+        const timeStamp = validateTimerStamp(ctx)
 
         const weights = await strapi.entityService.findMany('api::weight.weight', {
             filters: {
@@ -61,13 +68,13 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
         });
 
         if (weights.length === 0) {
-          ctx.status = 430;
-          ctx.body = {
-            error: 'No data to sync',
-            message: 'No Weights found after the specified timestamp'
-          };
+            ctx.status = 430;
+            ctx.body = {
+              error: 'No data to sync',
+              message: 'No Weights found after the specified timestamp'
+            };
         } else {
-          ctx.body = weights;
+            ctx.body = weights;
         }
       } catch (error) {
         strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);
