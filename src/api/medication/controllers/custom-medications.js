@@ -1,13 +1,21 @@
 const { createCoreController } = require('@strapi/strapi').factories;
-const stringToInteger = require('../../../utils/stringToInteger');
-const unixToISO = require('../../../utils/unixToISO');
-const userIdToString = require('../../../utils/userIdToString');
+
+const {
+  validateUserId,
+  validateTimerStamp,
+  validateRequestBodyIsArray,
+  removeTimestamps,
+  stringToInteger,
+  userIdToString
+} = require('../../../utils/validation');
+
 
 module.exports = createCoreController('api::medication.medication', ({
     strapi
   }) => ({
-  ...createCoreController('api::medication.medication').actions,
+  //...createCoreController('api::medication.medication').actions,
 
+    // TODO CHANGE updateRemoteData
     async updateRemoteData(ctx) {
         const items = ctx.request.body;
 
@@ -55,30 +63,33 @@ module.exports = createCoreController('api::medication.medication', ({
       });
     },
 
-    async fetchMedicationsAfterTimeStamp(ctx) {
-        try {
-            const userId = userIdToString(ctx.query.userId);
-            const timeStamp = stringToInteger(ctx.query.timeStamp);
-
-            const timers = await strapi.entityService.findMany('api::medication.medication', {
-              filters: {
-                userId: { $eq: userId },
-                updatedAtOnDevice: { $gt: timeStamp}
-              },
-            });
-
-            if (timers.length === 0) {
-                ctx.status = 404;
-                ctx.body = {
-                    error: 'No data to sync',
-                    message: 'No timer found after the specified timestamp'
-                };
-            } else {
-                ctx.body = timers;
-            }
-        } catch (error) {
-              strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);
+    async findUpdated(ctx) {
+        if (!validateUserId(ctx)) {
+          return; // Beendet die Ausführung, wenn die User ID ungültig ist
         }
-  },
+
+        const userId = userIdToString(ctx.query.userId);
+
+        const timeStamp = validateTimerStamp(ctx)
+
+        let result = await strapi.entityService.findMany('api::medication.medication', {
+          filters: {
+              userId: userId,
+              updatedAtOnDevice: { $gt: timeStamp },
+          },
+          populate: {
+              intake_times: {
+                filters: {
+                  updatedAtOnDevice: {$gt: timeStamp}, // Filter intake times
+                },
+                populate: 'intake_statuses',
+              },
+          },
+      });
+
+        ctx.body = removeTimestamps(result);
+    },
 
 }));
+
+

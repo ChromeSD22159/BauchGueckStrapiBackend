@@ -24,9 +24,6 @@
     "dosage": {
       "type": "string"
     },
-    "intakeTimes": {
-      "type": "string"
-    },
     "isDeleted": {
       "type": "boolean",
       "default": false,
@@ -35,6 +32,12 @@
     "updatedAtOnDevice": {
       "type": "biginteger",
       "required": true
+    },
+    "intake_times": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::intake-time.intake-time",
+      "mappedBy": "medication"
     }
   }
 }

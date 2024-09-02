@@ -63,12 +63,12 @@ module.exports = {
             }
         },
         {
-            method: "GET",
-            path: "/medication/fetchItemsAfterTimeStamp",
-            handler: "custom-medications.fetchMedicationsAfterTimeStamp",
-            config: {
-                policies: []
-            }
+          method: "GET",
+          path: "/medication/findUpdated",
+          handler: "custom-medications.findUpdated",
+          config: {
+            policies: []
+          }
         }
       // END CUSTOM ROUTES
     ]
