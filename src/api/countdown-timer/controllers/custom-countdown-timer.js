@@ -1,6 +1,8 @@
-const stringToInteger = require('../../../utils/stringToInteger');
-const unixToISO = require('../../../utils/unixToISO');
-const userIdToString = require('../../../utils/userIdToString');
+const {
+  stringToInteger,
+  userIdToString, validateUserId, validateTimerStamp
+} = require('../../../utils/validation');
+
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
@@ -46,7 +48,6 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
             }
         }
 
-
         ctx.send({
             message: 'Sync completed successfully'
         });
@@ -54,8 +55,13 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
 
     async fetchItemsAfterTimeStamp(ctx) {
         try {
-            const userId = userIdToString(ctx.query.userId);
-            const timeStamp = stringToInteger(ctx.query.timeStamp);
+          if (!validateUserId(ctx)) {
+            return;
+          }
+
+          const userId = userIdToString(ctx.query.userId);
+
+          const timeStamp = validateTimerStamp(ctx)
 
             const timers = await strapi.entityService.findMany('api::countdown-timer.countdown-timer', {
                 filters: {
