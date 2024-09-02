@@ -15,54 +15,6 @@ module.exports = createCoreController('api::medication.medication', ({
   }) => ({
   //...createCoreController('api::medication.medication').actions,
 
-    // TODO CHANGE updateRemoteData
-    async updateRemoteData(ctx) {
-        const items = ctx.request.body;
-
-        const deletedItems = [];
-
-        for (const item of items) {
-            const { medicationId, userId, isDeleted } = item;
-
-            // Check if Entry Exist
-            const existingEntry = await strapi.db.query('api::medication.medication').findOne({
-              where: { medicationId, userId }
-            });
-
-            // when timer is SoftDeleted
-            if (isDeleted) {
-                // Update SoftDelete on Backend
-                await strapi.entityService.update('api::medication.medication', existingEntry.id, {
-                  data: { isDeleted: true }
-                });
-
-                deletedItems.push({ medicationId, userId });
-
-            } else {
-                // when Exists Update it else Insert it
-                if (existingEntry) {
-                    await strapi.db.query('api::medication.medication').update({
-                        where: { id: existingEntry.id },
-                        data: {
-                          ...item,
-                          id: existingEntry.id
-                        }
-                  });
-              } else {
-                    delete item.id;
-                    await strapi.db.query('api::medication.medication').create({
-                      data: item
-                    });
-              }
-          }
-      }
-
-      ctx.send({
-        message: 'Sync completed successfully',
-        deletedMedications: deletedItems
-      });
-    },
-
     async findUpdated(ctx) {
         if (!validateUserId(ctx)) {
           return; // Beendet die Ausführung, wenn die User ID ungültig ist
@@ -89,6 +41,116 @@ module.exports = createCoreController('api::medication.medication', ({
 
         ctx.body = removeTimestamps(result);
     },
+    async updateRemoteData(ctx) {
+      const medicationsFromApp = ctx.request.body;
+
+      for (const medicationData of medicationsFromApp) {
+        const { medicationId, userId, isDeleted, intake_times } = medicationData;
+
+        // 1. Medikament suchen oder erstellen
+        let medicationOrNull = await strapi.db.query('api::medication.medication').findOne({
+          where: { medicationId, userId },
+        });
+
+        if (isDeleted) {
+          if (medicationOrNull) {
+            // Medikament existiert und soll gelöscht werden (Soft-Delete)
+            await strapi.entityService.update('api::medication.medication', medicationOrNull.id, {
+              data: { isDeleted: true },
+            });
+          }
+          // Wenn das Medikament nicht existiert und als gelöscht markiert ist, ignorieren wir es einfach
+          continue;
+        }
+
+        if (medicationOrNull) {
+          // Medikament existiert, also aktualisieren
+          await strapi.db.query('api::medication.medication').update({
+            where: { id: medicationOrNull.id },
+            data: { ...medicationData, id: medicationOrNull.id },
+          });
+        } else {
+          // Medikament existiert nicht, also erstellen
+          delete medicationData.id; // Sicherstellen, dass keine ID von der App übergeben wird
+          await strapi.db.query('api::medication.medication').create({
+            data: medicationData,
+          });
+        }
+
+        // 2. Einnahmezeiten verarbeiten (nur wenn das Medikament nicht gelöscht wurde)
+        if (!isDeleted) {
+          for (const intakeTimeData of intake_times) {
+            const { id: intakeTimeId, intakeTime, intake_statuses } = intakeTimeData;
+
+            // Einnahmezeit suchen oder erstellen
+            let intakeTimeOrNull = await strapi.db.query('api::intake-time.intake-time').findOne({
+              where: { id: intakeTimeId, medication: medicationOrNull.id },
+            });
+
+            if (intakeTimeOrNull) {
+              // Einnahmezeit existiert, also aktualisieren
+              await strapi.db.query('api::intake-time.intake-time').update({
+                where: { id: intakeTimeOrNull.id },
+                data: { intakeTime },
+              });
+            } else {
+              // Einnahmezeit existiert nicht, also erstellen
+              delete intakeTimeData.id;
+              await strapi.db.query('api::intake-time.intake-time').create({
+                data: { ...intakeTimeData, medication: medicationOrNull.id },
+              });
+            }
+
+            // 3. Einnahmestatus verarbeiten
+            for (const intakeStatusData of intake_statuses) {
+              const { id: intakeStatusId, date, isTaken } = intakeStatusData;
+
+              // Einnahmestatus suchen oder erstellen
+              let intakeStatus = await strapi.db.query('api::intake-status.intake-status').findOne({
+                where: { id: intakeStatusId, intake_time: intakeTime.id },
+              });
+
+              if (intakeStatus) {
+                // Einnahmestatus existiert, also aktualisieren
+                await strapi.db.query('api::intake-status.intake-status').update({
+                  where: { id: intakeStatus.id },
+                  data: { isTaken },
+                });
+              } else {
+                // Einnahmestatus existiert nicht, also erstellen
+                delete intakeStatusData.id;
+                await strapi.db.query('api::intake-status.intake-status').create({
+                  data: { ...intakeStatusData, intake_time: intakeTime.id },
+                });
+              }
+            }
+          }
+        }
+      }
+
+      ctx.send({
+        message: 'Sync completed successfully'
+      });
+    },
+    async getCounts(ctx) {
+      try {
+        // Verwende die Entity Service `count` Methode (empfohlen für Strapi v4 und neuer)
+        const medicationCount = await strapi.entityService.count('api::medication.medication');
+        const intakeTimeCount = await strapi.entityService.count('api::intake-time.intake-time');
+        const intakeStatusCount = await strapi.entityService.count('api::intake-status.intake-status');
+
+        ctx.body = {
+          medications: medicationCount,
+          intakeTimes: intakeTimeCount,
+          intakeStatuses: intakeStatusCount
+        };
+      } catch (err) {
+        ctx.status = 500;
+        ctx.body = {
+          "message": err.message,
+        }
+      }
+    }
 
 }));
 

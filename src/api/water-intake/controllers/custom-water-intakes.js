@@ -183,5 +183,20 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
         ctx.status = 500;
         ctx.body = { error: 'An error occurred while fetching water intakes' };
       }
+    },
+
+    async getCounts(ctx) {
+      try {
+          const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake');
+
+          ctx.body = {
+            waterIntakesEntries: waterIntakesEntries
+          };
+      } catch (err) {
+          ctx.status = 500;
+          ctx.body = {
+            "message": err.message,
+          }
+      }
     }
   }));

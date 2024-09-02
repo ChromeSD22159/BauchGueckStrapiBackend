@@ -84,4 +84,19 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
         }
     },
 
+    async getCounts(ctx) {
+        try {
+            const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
+
+            ctx.body = {
+              countdownTimerTotalEntries: countdownTimerTotalEntries
+            };
+        } catch (err) {
+            ctx.status = 500;
+            ctx.body = {
+              "message": err.message,
+            }
+        }
+    }
+
   }));

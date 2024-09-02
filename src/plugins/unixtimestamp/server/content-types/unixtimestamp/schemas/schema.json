@@ -1,9 +1,0 @@
-{
-  "kind": "singleType",
-  "attributes": {
-    "timestamp": {
-      "type": "integer",
-      "customField": "plugin::unixtimestamp.unix-timestamp"
-    }
-  }
-}
