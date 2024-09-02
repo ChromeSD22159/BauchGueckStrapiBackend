@@ -69,6 +69,14 @@ module.exports = {
           config: {
             policies: []
           }
+        },
+        {
+          method: "GET",
+          path: "/medication/counts",
+          handler: "custom-medications.getCounts",
+          config: {
+            policies: []
+          }
         }
       // END CUSTOM ROUTES
     ]
