@@ -71,9 +71,32 @@ function validateRequestBodyIsArray(ctx) {
   return true; // Rückgabe von true, wenn die Validierung erfolgreich war
 }
 
+function handleEmptyResponseBody(ctx, error) {
+  if (ctx.body.length === 0) {
+      ctx.status = 430;
+      ctx.body = { message: error };
+  }
+}
+
+function handleEmptyUserParameter(ctx) {
+  return !validateUserId(ctx);
+}
+
+function handleSearchQueryMustContain3Chars(ctx, error) {
+  if (!ctx.query.searchQuery || ctx.query.searchQuery.length < 3) {
+    ctx.status = 430;
+    ctx.body = { message: error };
+    return true;
+  }
+  return false;
+}
+
 module.exports = {
   stringToInteger,
   unixToISO,
+  handleEmptyResponseBody,
+  handleEmptyUserParameter,
+  handleSearchQueryMustContain3Chars,
   userIdToString,
   removeTimestamps,
   validateUserId,
