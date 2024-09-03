@@ -32,6 +32,40 @@ npm run build
 yarn build
 ```
 
+
+## API Routes
+### General Endpoints
+`GET /api/getCurrentTimeStamp`
+- Retrieves the current, previous, and future timestamps for synchronization purposes.
+
+`GET /api/getApiStatistics`
+- Retrieves statistical data about various entities within the application.
+
+### Medication Endpoints
+`POST /api/medication/syncDeviceMedicationData`
+- Syncs medication data from the device to the server.
+
+`GET /api/medication/getUpdatedMedicationEntries`
+- Retrieves updated medication entries for a specific user based on a provided timestamp.
+
+### Recipe Endpoints
+`GET /api/recipes/searchRecipes`
+- Retrieves a list of recipes based on the search query, including public and private recipes owned by the user.
+
+`POST /api/recipes/createRecipe`
+- Creates a new recipe and stores it in the database.
+
+### Meal Plan Endpoints
+`POST /api/mealPlan/syncDeviceMealPlanDayData` 
+- Syncs meal plan data from the device to the server.
+
+
+`GET /api/mealPlan/getUpdatedMealPlanDayEntries`
+- Retrieves updated meal plan day entries for a specific user based on a provided timestamp.
+
+
+
+
 ## ⚙️ Instructions for using the Postman Collection
 
 This Postman Collection contains API requests for interacting with the BauchGlück backend. Before you can execute the requests, you must configure the required environment variables.
