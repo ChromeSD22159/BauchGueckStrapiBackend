@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meal_plan_days",
+  "info": {
+    "singularName": "meal-plan-day",
+    "pluralName": "meal-plan-days",
+    "displayName": "MealPlanDay"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mealPlanDayId": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger"
+    },
+    "mealPlanSlots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::meal-plan-slot.meal-plan-slot",
+      "mappedBy": "mealPlanDay"
+    }
+  }
+}

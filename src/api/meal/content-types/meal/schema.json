@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meals",
+  "info": {
+    "singularName": "meal",
+    "pluralName": "meals",
+    "displayName": "Meal"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mealId": {
+      "type": "string"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "isRecipe": {
+      "type": "boolean"
+    },
+    "isSnack": {
+      "type": "boolean",
+      "default": false
+    },
+    "isPrivate": {
+      "type": "boolean",
+      "default": false
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger"
+    },
+    "ingredients": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ingredient.ingredient",
+      "mappedBy": "meal"
+    },
+    "mealPlanSlots": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::meal-plan-slot.meal-plan-slot"
+    }
+  }
+}

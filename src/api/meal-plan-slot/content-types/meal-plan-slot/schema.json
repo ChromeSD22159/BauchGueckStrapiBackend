@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "meal_plan_slots",
+  "info": {
+    "singularName": "meal-plan-slot",
+    "pluralName": "meal-plan-slots",
+    "displayName": "MealPlanSlot"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mealPlanSlotId": {
+      "type": "string"
+    },
+    "dayId": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::meal-plan-day.meal-plan-day",
+      "inversedBy": "mealPlanSlots"
+    },
+    "mealId": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::meal.meal",
+      "inversedBy": "mealPlanSlots"
+    },
+    "userId": {
+      "type": "string"
+    },
+    "timeSlot": {
+      "type": "string"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger"
+    }
+  }
+}
