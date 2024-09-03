@@ -13,9 +13,8 @@ const {
 module.exports = createCoreController('api::medication.medication', ({
     strapi
   }) => ({
-  //...createCoreController('api::medication.medication').actions,
-
-    async findUpdated(ctx) {
+      /*
+    async getUpdatedEntries(ctx) {
         if (!validateUserId(ctx)) {
           return; // Beendet die Ausführung, wenn die User ID ungültig ist
         }
@@ -41,7 +40,7 @@ module.exports = createCoreController('api::medication.medication', ({
 
         ctx.body = removeTimestamps(result);
     },
-    async updateRemoteData(ctx) {
+    async syncDeviceData(ctx) {
       const medicationsFromApp = ctx.request.body;
 
       for (const medicationData of medicationsFromApp) {
@@ -132,7 +131,7 @@ module.exports = createCoreController('api::medication.medication', ({
         message: 'Sync completed successfully'
       });
     },
-
+      */
 }));
 
 

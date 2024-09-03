@@ -54,6 +54,7 @@ module.exports = {
 
 
         // CUSTOM ROUTES
+       /*
         {
             method: "POST",
             path: "/medication/updateRemoteData",
@@ -70,6 +71,7 @@ module.exports = {
             policies: []
           }
         }
+        */
       // END CUSTOM ROUTES
     ]
 }

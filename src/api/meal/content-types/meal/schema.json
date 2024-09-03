@@ -4,7 +4,8 @@
   "info": {
     "singularName": "meal",
     "pluralName": "meals",
-    "displayName": "Meal"
+    "displayName": "Meal",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -23,8 +24,8 @@
     "description": {
       "type": "text"
     },
-    "isRecipe": {
-      "type": "boolean"
+    "preparation": {
+      "type": "text"
     },
     "isSnack": {
       "type": "boolean",
@@ -41,16 +42,29 @@
     "updatedAtOnDevice": {
       "type": "biginteger"
     },
-    "ingredients": {
+    "category": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::ingredient.ingredient",
-      "mappedBy": "meal"
+      "relation": "manyToOne",
+      "target": "api::recipe-category.recipe-category"
     },
     "mealPlanSlots": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::meal-plan-slot.meal-plan-slot"
+    },
+    "mainImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "ingredients": {
+      "type": "dynamiczone",
+      "components": [
+        "recipe.single-ingredient"
+      ]
     }
   }
 }

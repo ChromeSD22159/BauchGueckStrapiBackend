@@ -818,6 +818,7 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
       Attribute.Required &
       Attribute.DefaultTo<false>;
     updatedAtOnDevice: Attribute.BigInteger & Attribute.Required;
+    ingredients: Attribute.DynamicZone<['recipe.single-ingredient']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -828,45 +829,6 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::countdown-timer.countdown-timer',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiIngredientIngredient extends Schema.CollectionType {
-  collectionName: 'ingredients';
-  info: {
-    singularName: 'ingredient';
-    pluralName: 'ingredients';
-    displayName: 'Ingredient';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    ingredientId: Attribute.String;
-    mealId: Attribute.Relation<
-      'api::ingredient.ingredient',
-      'manyToOne',
-      'api::meal.meal'
-    >;
-    name: Attribute.String;
-    amount: Attribute.Decimal;
-    unit: Attribute.String;
-    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
-    updatedAtOnDevice: Attribute.BigInteger;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::ingredient.ingredient',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::ingredient.ingredient',
       'oneToOne',
       'admin::user'
     > &
@@ -958,6 +920,7 @@ export interface ApiMealMeal extends Schema.CollectionType {
     singularName: 'meal';
     pluralName: 'meals';
     displayName: 'Meal';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -967,21 +930,23 @@ export interface ApiMealMeal extends Schema.CollectionType {
     userId: Attribute.String;
     name: Attribute.String;
     description: Attribute.Text;
-    isRecipe: Attribute.Boolean;
+    preparation: Attribute.Text;
     isSnack: Attribute.Boolean & Attribute.DefaultTo<false>;
     isPrivate: Attribute.Boolean & Attribute.DefaultTo<false>;
     isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
     updatedAtOnDevice: Attribute.BigInteger;
-    ingredients: Attribute.Relation<
+    category: Attribute.Relation<
       'api::meal.meal',
-      'oneToMany',
-      'api::ingredient.ingredient'
+      'manyToOne',
+      'api::recipe-category.recipe-category'
     >;
     mealPlanSlots: Attribute.Relation<
       'api::meal.meal',
       'manyToOne',
       'api::meal-plan-slot.meal-plan-slot'
     >;
+    mainImage: Attribute.Media<'images'>;
+    ingredients: Attribute.DynamicZone<['recipe.single-ingredient']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::meal.meal', 'oneToOne', 'admin::user'> &
@@ -1107,6 +1072,37 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::medication.medication',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiRecipeCategoryRecipeCategory extends Schema.CollectionType {
+  collectionName: 'recipe_categories';
+  info: {
+    singularName: 'recipe-category';
+    pluralName: 'recipe-categories';
+    displayName: 'Recipe Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    categoryId: Attribute.String & Attribute.Required;
+    name: Attribute.String & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::recipe-category.recipe-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::recipe-category.recipe-category',
       'oneToOne',
       'admin::user'
     > &
@@ -1317,13 +1313,13 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
-      'api::ingredient.ingredient': ApiIngredientIngredient;
       'api::intake-status.intake-status': ApiIntakeStatusIntakeStatus;
       'api::intake-time.intake-time': ApiIntakeTimeIntakeTime;
       'api::meal.meal': ApiMealMeal;
       'api::meal-plan-day.meal-plan-day': ApiMealPlanDayMealPlanDay;
       'api::meal-plan-slot.meal-plan-slot': ApiMealPlanSlotMealPlanSlot;
       'api::medication.medication': ApiMedicationMedication;
+      'api::recipe-category.recipe-category': ApiRecipeCategoryRecipeCategory;
       'api::shopping-list.shopping-list': ApiShoppingListShoppingList;
       'api::shopping-list-item.shopping-list-item': ApiShoppingListItemShoppingListItem;
       'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;

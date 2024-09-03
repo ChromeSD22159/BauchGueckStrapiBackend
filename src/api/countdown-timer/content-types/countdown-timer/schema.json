@@ -58,6 +58,12 @@
     "updatedAtOnDevice": {
       "type": "biginteger",
       "required": true
+    },
+    "ingredients": {
+      "type": "dynamiczone",
+      "components": [
+        "recipe.single-ingredient"
+      ]
     }
   }
 }
