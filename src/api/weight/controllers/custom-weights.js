@@ -80,19 +80,4 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
         strapi.log.error('Fehler beim Löschen von soft-deleted Timern:', error);
       }
     },
-
-    async getCounts(ctx) {
-    try {
-      const weightsEntries = await strapi.entityService.count('api::weight.weight');
-
-      ctx.body = {
-        weightsEntries: weightsEntries
-      };
-    } catch (err) {
-      ctx.status = 500;
-      ctx.body = {
-        "message": err.message,
-      }
-    }
-  }
 }));

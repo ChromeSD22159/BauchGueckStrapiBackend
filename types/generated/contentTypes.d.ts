@@ -835,6 +835,45 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
   };
 }
 
+export interface ApiIngredientIngredient extends Schema.CollectionType {
+  collectionName: 'ingredients';
+  info: {
+    singularName: 'ingredient';
+    pluralName: 'ingredients';
+    displayName: 'Ingredient';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    ingredientId: Attribute.String;
+    mealId: Attribute.Relation<
+      'api::ingredient.ingredient',
+      'manyToOne',
+      'api::meal.meal'
+    >;
+    name: Attribute.String;
+    amount: Attribute.Decimal;
+    unit: Attribute.String;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::ingredient.ingredient',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::ingredient.ingredient',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiIntakeStatusIntakeStatus extends Schema.CollectionType {
   collectionName: 'intake_statuses';
   info: {
@@ -913,6 +952,126 @@ export interface ApiIntakeTimeIntakeTime extends Schema.CollectionType {
   };
 }
 
+export interface ApiMealMeal extends Schema.CollectionType {
+  collectionName: 'meals';
+  info: {
+    singularName: 'meal';
+    pluralName: 'meals';
+    displayName: 'Meal';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    mealId: Attribute.String;
+    userId: Attribute.String;
+    name: Attribute.String;
+    description: Attribute.Text;
+    isRecipe: Attribute.Boolean;
+    isSnack: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isPrivate: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    ingredients: Attribute.Relation<
+      'api::meal.meal',
+      'oneToMany',
+      'api::ingredient.ingredient'
+    >;
+    mealPlanSlots: Attribute.Relation<
+      'api::meal.meal',
+      'manyToOne',
+      'api::meal-plan-slot.meal-plan-slot'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::meal.meal', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::meal.meal', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMealPlanDayMealPlanDay extends Schema.CollectionType {
+  collectionName: 'meal_plan_days';
+  info: {
+    singularName: 'meal-plan-day';
+    pluralName: 'meal-plan-days';
+    displayName: 'MealPlanDay';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    mealPlanDayId: Attribute.String;
+    userId: Attribute.String;
+    date: Attribute.String;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    mealPlanSlots: Attribute.Relation<
+      'api::meal-plan-day.meal-plan-day',
+      'oneToMany',
+      'api::meal-plan-slot.meal-plan-slot'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meal-plan-day.meal-plan-day',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::meal-plan-day.meal-plan-day',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMealPlanSlotMealPlanSlot extends Schema.CollectionType {
+  collectionName: 'meal_plan_slots';
+  info: {
+    singularName: 'meal-plan-slot';
+    pluralName: 'meal-plan-slots';
+    displayName: 'MealPlanSlot';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    mealPlanSlotId: Attribute.String;
+    dayId: Attribute.Relation<
+      'api::meal-plan-slot.meal-plan-slot',
+      'manyToOne',
+      'api::meal-plan-day.meal-plan-day'
+    >;
+    mealId: Attribute.Relation<
+      'api::meal-plan-slot.meal-plan-slot',
+      'manyToOne',
+      'api::meal.meal'
+    >;
+    userId: Attribute.String;
+    timeSlot: Attribute.String;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::meal-plan-slot.meal-plan-slot',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::meal-plan-slot.meal-plan-slot',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMedicationMedication extends Schema.CollectionType {
   collectionName: 'medications';
   info: {
@@ -948,6 +1107,85 @@ export interface ApiMedicationMedication extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::medication.medication',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiShoppingListShoppingList extends Schema.CollectionType {
+  collectionName: 'shopping_lists';
+  info: {
+    singularName: 'shopping-list';
+    pluralName: 'shopping-lists';
+    displayName: 'ShoppingList';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    shoppingListId: Attribute.String;
+    startDate: Attribute.String;
+    endDate: Attribute.String;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    items: Attribute.Relation<
+      'api::shopping-list.shopping-list',
+      'oneToMany',
+      'api::shopping-list-item.shopping-list-item'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::shopping-list.shopping-list',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::shopping-list.shopping-list',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiShoppingListItemShoppingListItem
+  extends Schema.CollectionType {
+  collectionName: 'shopping_list_items';
+  info: {
+    singularName: 'shopping-list-item';
+    pluralName: 'shopping-list-items';
+    displayName: 'ShoppingListItem';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    shoppingItemId: Attribute.String;
+    shoppingListId: Attribute.Relation<
+      'api::shopping-list-item.shopping-list-item',
+      'manyToOne',
+      'api::shopping-list.shopping-list'
+    >;
+    ingredientName: Attribute.String;
+    quantity: Attribute.Decimal;
+    unit: Attribute.String;
+    isChecked: Attribute.Boolean;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    updatedAtOnDevice: Attribute.BigInteger;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::shopping-list-item.shopping-list-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::shopping-list-item.shopping-list-item',
       'oneToOne',
       'admin::user'
     > &
@@ -1079,9 +1317,15 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
+      'api::ingredient.ingredient': ApiIngredientIngredient;
       'api::intake-status.intake-status': ApiIntakeStatusIntakeStatus;
       'api::intake-time.intake-time': ApiIntakeTimeIntakeTime;
+      'api::meal.meal': ApiMealMeal;
+      'api::meal-plan-day.meal-plan-day': ApiMealPlanDayMealPlanDay;
+      'api::meal-plan-slot.meal-plan-slot': ApiMealPlanSlotMealPlanSlot;
       'api::medication.medication': ApiMedicationMedication;
+      'api::shopping-list.shopping-list': ApiShoppingListShoppingList;
+      'api::shopping-list-item.shopping-list-item': ApiShoppingListItemShoppingListItem;
       'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;
       'api::weight.weight': ApiWeightWeight;

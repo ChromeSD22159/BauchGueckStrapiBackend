@@ -94,14 +94,6 @@ module.exports = {
             config: {
                 policies: []
             }
-        },
-        {
-          method: "GET",
-          path: "/water-intake/counts",
-          handler: "custom-water-intakes.getCounts",
-          config: {
-            policies: []
-          }
         }
     ]
 }

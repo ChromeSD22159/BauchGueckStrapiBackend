@@ -68,14 +68,6 @@ module.exports = {
             config: {
                 policies: []
             }
-        },
-        {
-          method: "GET",
-          path: "/timer/counts",
-          handler: "custom-countdown-timer.getCounts",
-          config: {
-            policies: []
-          }
         }
         // END CUSTOM ROUTES
     ]

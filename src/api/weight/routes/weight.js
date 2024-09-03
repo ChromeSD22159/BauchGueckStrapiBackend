@@ -71,13 +71,5 @@ module.exports = {
                 policies: []
             }
         },
-        {
-          method: "GET",
-          path: "/weight/counts",
-          handler: "custom-weights.getCounts",
-          config: {
-            policies: []
-          }
-        }
     ]
 }

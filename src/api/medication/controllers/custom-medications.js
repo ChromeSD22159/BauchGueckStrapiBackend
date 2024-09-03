@@ -132,25 +132,6 @@ module.exports = createCoreController('api::medication.medication', ({
         message: 'Sync completed successfully'
       });
     },
-    async getCounts(ctx) {
-      try {
-        // Verwende die Entity Service `count` Methode (empfohlen für Strapi v4 und neuer)
-        const medicationCount = await strapi.entityService.count('api::medication.medication');
-        const intakeTimeCount = await strapi.entityService.count('api::intake-time.intake-time');
-        const intakeStatusCount = await strapi.entityService.count('api::intake-status.intake-status');
-
-        ctx.body = {
-          medications: medicationCount,
-          intakeTimes: intakeTimeCount,
-          intakeStatuses: intakeStatusCount
-        };
-      } catch (err) {
-        ctx.status = 500;
-        ctx.body = {
-          "message": err.message,
-        }
-      }
-    }
 
 }));
 
