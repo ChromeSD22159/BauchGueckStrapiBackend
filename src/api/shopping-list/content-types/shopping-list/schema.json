@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shopping_lists",
+  "info": {
+    "singularName": "shopping-list",
+    "pluralName": "shopping-lists",
+    "displayName": "ShoppingList"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "shoppingListId": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false
+    },
+    "updatedAtOnDevice": {
+      "type": "biginteger"
+    },
+    "items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::shopping-list-item.shopping-list-item",
+      "mappedBy": "shoppingList"
+    }
+  }
+}
