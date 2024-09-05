@@ -33,14 +33,14 @@ module.exports = {
             };
         }
     },
-
     async getApiStatistics(ctx) {
         try {
             const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
 
-            const medicationEntries = await strapi.entityService.count('api::medication.medication');
-            const intakeTimeEntries = await strapi.entityService.count('api::intake-time.intake-time');
-            const intakeStatusEntries = await strapi.entityService.count('api::intake-status.intake-status');
+            const totalMeal = await strapi.entityService.count('api::meal.meal');
+            const totalMedication = await strapi.entityService.count('api::medication.medication');
+            const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time');
+            const totalIntakeStatus = await strapi.entityService.count('api::intake-status.intake-status');
 
             const weightsEntries = await strapi.entityService.count('api::weight.weight');
             const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake');
@@ -48,32 +48,48 @@ module.exports = {
             let totalEntries = 0;
             const totalEntriesArray = [
                 countdownTimerTotalEntries,
-                medicationEntries,
-                intakeTimeEntries,
-                intakeStatusEntries,
+                totalMedication,
+                totalIntakeTimes,
+                totalIntakeStatus,
                 weightsEntries,
                 waterIntakesEntries
             ]
 
             totalEntriesArray.forEach(count=> {
-              totalEntries += count;
+                totalEntries += count;
             })
 
             let avgWeightPerUser = await avgWeightFromUsers()
             let avgDurationPerUser = await avgDurationsFromUsers()
-
+            let avgMedicationsData = await avgMedicationsTimerFromUsers(totalMedication)
+            let avgStatusPerUser = avgMedicationsData.avgStatusPerUser
+            let avgTimerPerUser = avgMedicationsData.avgTimerPerUser
             return {
-              countdownTimerTotalEntries,
+
               medications: {
-                medicationEntries,
-                intakeTimeEntries,
-                intakeStatusEntries
+                totalMedication,
+                totalIntakeTimes,
+                totalIntakeStatus,
               },
-              weightsEntries,
-              waterIntakesEntries,
+              recipes:{
+                totalMeal
+              },
               totalEntries,
-              avgWeightPerUser,
-              avgDurationPerUser
+              timer:{
+                countdownTimerTotalEntries
+              },
+              userRelated: {
+                avgWeightPerUser,
+                avgDurationPerUser,
+                avgTimerPerUser,
+                avgStatusPerUser
+              },
+              weights: {
+                weightsEntries
+              },
+              waterIntake: {
+                waterIntakesEntries
+              }
           };
         } catch (err) {
             ctx.status = 500;
@@ -85,7 +101,6 @@ module.exports = {
 
 
     // NOTE: Medication
-    // TODO::::
     async getUpdatedMedicationEntries(ctx) {
         if (handleEmptyUserParameter(ctx)) return;
 
@@ -398,8 +413,8 @@ async function avgDurationsFromUsers() {
   const x = "api::countdown-timer.countdown-timer"
 
   const uniqueUserIds = await strapi.db.query('api::water-intake.water-intake').findMany({
-    select: ['userId'],
-    distinct: true,
+      select: ['userId'],
+      distinct: true,
   });
 
   let totalTimerDuration = 0;
@@ -420,6 +435,33 @@ async function avgDurationsFromUsers() {
   }
 
   return count > 0 ? totalTimerDuration / count : 0;
+}
+
+async function avgMedicationsTimerFromUsers(totalMedication) {
+  const intakeTime = "api::intake-time.intake-time"
+  const intakeStatus = "api::intake-status.intake-status"
+
+  const uniqueUserIds = await strapi.db.query(intakeTime).findMany({
+      select: ['intakeTimeId'],
+      distinct: true,
+  });
+
+  let totalStatusPerUser = 0;
+  let count = 0;
+
+  for (const timer of uniqueUserIds) {
+      const statusEntries = await strapi.entityService.findMany(intakeStatus, {
+          filters: {intakeTimeId: timer.intakeTimeId},
+      });
+
+      totalStatusPerUser += parseFloat(statusEntries.length);
+      count++;
+  }
+
+  return {
+    avgStatusPerUser: totalStatusPerUser / totalMedication,
+    avgTimerPerUser: count / totalMedication
+  }
 }
 
 function removeComponentFieldFromIngredients(meal) {
