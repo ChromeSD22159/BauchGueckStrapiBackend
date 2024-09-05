@@ -848,7 +848,7 @@ export interface ApiIntakeStatusIntakeStatus extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    date: Attribute.DateTime;
+    date: Attribute.BigInteger;
     isTaken: Attribute.Boolean;
     updatedAtOnDevice: Attribute.BigInteger;
     intake_time: Attribute.Relation<
@@ -856,6 +856,7 @@ export interface ApiIntakeStatusIntakeStatus extends Schema.CollectionType {
       'manyToOne',
       'api::intake-time.intake-time'
     >;
+    intakeStatusId: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -897,6 +898,7 @@ export interface ApiIntakeTimeIntakeTime extends Schema.CollectionType {
       'api::intake-status.intake-status'
     >;
     updatedAtOnDevice: Attribute.BigInteger;
+    intakeTimeId: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

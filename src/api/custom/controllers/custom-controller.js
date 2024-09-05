@@ -85,133 +85,141 @@ module.exports = {
 
 
     // NOTE: Medication
+    // TODO::::
     async getUpdatedMedicationEntries(ctx) {
-      if (handleEmptyUserParameter(ctx)) return;
+        if (handleEmptyUserParameter(ctx)) return;
 
-      const userId = userIdToString(ctx.query.userId);
+        const userId = userIdToString(ctx.query.userId);
 
-      const timeStamp = validateTimerStamp(ctx)
+        const timeStamp = validateTimerStamp(ctx)
 
-      let result = await strapi.entityService.findMany('api::medication.medication', {
-        filters: {
-          userId: userId,
-          updatedAtOnDevice: { $gt: timeStamp },
-        },
-        populate: {
-          intake_times: {
+        let result = await strapi.entityService.findMany('api::medication.medication', {
             filters: {
-              updatedAtOnDevice: {$gt: timeStamp}, // Filter intake times
+                userId: userId,
+                updatedAtOnDevice: { $gt: timeStamp },
             },
-            populate: 'intake_statuses',
-          },
-        },
-      });
-
-      ctx.body = removeTimestamps(result);
-
-      handleEmptyResponseBody(ctx, 'No medication found after the specified timestamp')
-    },
-
-    async syncDeviceMedicationData(ctx) {
-      if(!validateRequestBodyIsArray(ctx)) return;
-
-      const medicationsFromApp = ctx.request.body;
-
-      for (const medicationData of medicationsFromApp) {
-        const { medicationId, userId, isDeleted, intake_times } = medicationData;
-
-        // 1. Medikament suchen oder erstellen
-        let medicationOrNull = await strapi.db.query('api::medication.medication').findOne({
-          where: { medicationId, userId },
+            populate: {
+                intake_times: {
+                    filters: {
+                        updatedAtOnDevice: {$gt: timeStamp}, // Filter intake times
+                    },
+                    populate: 'intake_statuses',
+                },
+            },
         });
 
-        if (isDeleted) {
-          if (medicationOrNull) {
-            // Medikament existiert und soll gelöscht werden (Soft-Delete)
-            await strapi.entityService.update('api::medication.medication', medicationOrNull.id, {
-              data: { isDeleted: true },
-            });
-          }
-          // Wenn das Medikament nicht existiert und als gelöscht markiert ist, ignorieren wir es einfach
-          continue;
-        }
+        ctx.body = removeTimestamps(result);
 
-        let medicationIdToUse = medicationOrNull ? medicationOrNull.id : null;
-
-        if (medicationOrNull) {
-          // Medikament existiert, also aktualisieren
-          await strapi.db.query('api::medication.medication').update({
-            where: { id: medicationOrNull.id },
-            data: { ...medicationData, id: medicationOrNull.id },
-          });
-        } else {
-          // Medikament existiert nicht, also erstellen
-          delete medicationData.id; // Sicherstellen, dass keine ID von der App übergeben wird
-          const newMedication = await strapi.db.query('api::medication.medication').create({
-            data: medicationData,
-          });
-          medicationIdToUse = newMedication.id; // Neue ID verwenden
-        }
-
-        // 2. Einnahmezeiten verarbeiten (nur wenn das Medikament nicht gelöscht wurde)
-        if (!isDeleted) {
-          for (const intakeTimeData of intake_times) {
-            const { id: intakeTimeId, intakeTime, intake_statuses } = intakeTimeData;
-
-            // Einnahmezeit suchen oder erstellen
-            let intakeTimeOrNull = await strapi.db.query('api::intake-time.intake-time').findOne({
-              where: { id: intakeTimeId, medication: medicationIdToUse },
-            });
-
-            let intakeTimeIdToUse = intakeTimeOrNull ? intakeTimeOrNull.id : null;
-
-            if (intakeTimeOrNull) {
-              // Einnahmezeit existiert, also aktualisieren
-              await strapi.db.query('api::intake-time.intake-time').update({
-                where: { id: intakeTimeOrNull.id },
-                data: { intakeTime },
-              });
-            } else {
-              // Einnahmezeit existiert nicht, also erstellen
-              delete intakeTimeData.id;
-              const newIntakeTime = await strapi.db.query('api::intake-time.intake-time').create({
-                data: { ...intakeTimeData, medication: medicationIdToUse },
-              });
-              intakeTimeIdToUse = newIntakeTime.id;
-            }
-
-            // 3. Einnahmestatus verarbeiten
-            for (const intakeStatusData of intake_statuses) {
-              const { id: intakeStatusId, date, isTaken } = intakeStatusData;
-
-              // Einnahmestatus suchen oder erstellen
-              let intakeStatus = await strapi.db.query('api::intake-status.intake-status').findOne({
-                where: { id: intakeStatusId, intake_time: intakeTimeIdToUse },
-              });
-
-              if (intakeStatus) {
-                // Einnahmestatus existiert, also aktualisieren
-                await strapi.db.query('api::intake-status.intake-status').update({
-                  where: { id: intakeStatus.id },
-                  data: { isTaken },
-                });
-              } else {
-                // Einnahmestatus existiert nicht, also erstellen
-                delete intakeStatusData.id;
-                await strapi.db.query('api::intake-status.intake-status').create({
-                  data: { ...intakeStatusData, intake_time: intakeTimeIdToUse },
-                });
-              }
-            }
-          }
-        }
-      }
-
-      ctx.send({
-        message: 'Sync completed successfully'
-      });
+        handleEmptyResponseBody(ctx, 'No medication found after the specified timestamp')
     },
+    async syncDeviceMedicationData(ctx) {
+        const medicationsFromApp = ctx.request.body;
 
+        for (const medicationData of medicationsFromApp) {
+            const { medication, intakeTimesWithStatus } = medicationData;
+
+            // 1. Medikament suchen Ob Medikation existiert
+            let medicationOrNull = await strapi.db.query('api::medication.medication').findOne({
+                  where: {
+                      medicationId: medication.medicationId,
+                      userId: medication.userId
+                  },
+            });
+
+            // 2. wenn zugesendete gelöscht ist update Strapi
+            if (medication.isDeleted) {
+                if (medicationOrNull) {
+                    await strapi.entityService.update('api::medication.medication', medicationOrNull.id, {
+                        data: { isDeleted: true },
+                    });
+                }
+                continue;
+            }
+
+            // 3. set idOrNull
+            let medicationIdToUse = medicationOrNull ? medicationOrNull.id : null;
+
+            // 4. wenn Medikament ist vorhanden update anhand der id, wenn nicht entferne id und update
+            if (medicationOrNull) {
+                // Medikament existiert, also aktualisieren
+                await strapi.db.query('api::medication.medication').update({
+                      where: { id: medicationOrNull.id },
+                      data: { ...medication, id: medicationOrNull.id },
+                });
+            } else {
+                // Medikament existiert nicht, also erstellen
+                  delete medication.id;
+                  const newMedication = await strapi.db.query('api::medication.medication').create({
+                      data: medication,
+                  });
+                  medicationIdToUse = newMedication.id;
+            }
+
+
+            for(const medicationIntakeTimeData of intakeTimesWithStatus) {
+                const { intakeTime, intakeStatuses } = medicationIntakeTimeData;
+                // 1. Medikament suchen Ob Medikation existiert
+                let intakeTimeOrNull = await strapi.db.query('api::intake-time.intake-time').findOne({
+                    where: {
+                      intakeTimeId: intakeTime.intakeTimeId
+                    },
+                });
+
+                // 2. set idOrNull
+                let intakeTimeIdToUse = intakeTimeOrNull ? intakeTimeOrNull.id : null;
+
+                // 3. wenn Medikament ist vorhanden update anhand der id, wenn nicht entferne id und update
+                if (intakeTimeIdToUse) {
+                    // Medikament existiert, also aktualisieren
+                    intakeTime.id = intakeTimeIdToUse.id;
+
+                    await strapi.db.query('api::intake-time.intake-time').update({
+                        where: { id: intakeTimeOrNull.id },
+                        data: { ...intakeTime, id: intakeTimeOrNull.id },
+                    });
+                } else {
+                    // Medikament existiert nicht, also erstellen
+                    const newIntakeTime = await strapi.entityService.create('api::intake-time.intake-time', {
+                      data: { ...intakeTime, medication: medicationIdToUse },
+                    });
+                    intakeTimeIdToUse = newIntakeTime.id;
+                }
+
+                for (const intakeTimeStatusData of intakeStatuses) {
+
+                    let intakeStatusOrNull = await strapi.db.query('api::intake-status.intake-status').findOne({
+                        where: {
+                            intakeStatusId: intakeTimeStatusData.intakeStatusId
+                        },
+                    });
+
+                    let intakeStatusIdToUse = intakeStatusOrNull ? intakeStatusOrNull.id : null;
+
+                    if (intakeStatusIdToUse) {
+
+                       if(intakeTimeStatusData.isTaken === undefined) {
+                         intakeTimeStatusData.isTaken = false
+                       }
+
+                        await strapi.db.query('api::intake-status.intake-status').update({
+                            where: { id: intakeStatusOrNull.id },
+                            data: { ...intakeTimeStatusData, id: intakeStatusOrNull.id },
+                        });
+                    } else {
+                        const newIntakeStatus = await strapi.entityService.create('api::intake-status.intake-status', {
+                            data: { ...intakeTimeStatusData, intake_time: intakeTimeIdToUse },
+                        });
+                        intakeStatusIdToUse = newIntakeStatus.id;
+                    }
+                }
+            }
+
+        }
+
+        ctx.send({
+          message: 'Sync completed successfully'
+        });
+  },
 
     // NOTE: Recipes
     async searchRecipes(ctx) {

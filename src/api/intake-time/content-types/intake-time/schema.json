@@ -29,6 +29,9 @@
     },
     "updatedAtOnDevice": {
       "type": "biginteger"
+    },
+    "intakeTimeId": {
+      "type": "string"
     }
   }
 }

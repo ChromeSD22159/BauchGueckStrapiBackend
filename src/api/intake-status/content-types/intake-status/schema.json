@@ -13,7 +13,7 @@
   "pluginOptions": {},
   "attributes": {
     "date": {
-      "type": "datetime"
+      "type": "biginteger"
     },
     "isTaken": {
       "type": "boolean"
@@ -26,6 +26,9 @@
       "relation": "manyToOne",
       "target": "api::intake-time.intake-time",
       "inversedBy": "intake_statuses"
+    },
+    "intakeStatusId": {
+      "type": "string"
     }
   }
 }
