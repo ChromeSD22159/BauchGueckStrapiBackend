@@ -98,6 +98,21 @@ module.exports = {
           }
         }
   },
+    async generateID(ctx) {
+      try {
+        const id = generateId();
+
+        ctx.body = {
+          generatedId: id
+        };
+      } catch(error) {
+          ctx.status = 500;
+          ctx.body = {
+              "message": "An error occurred while retrieving the timestamp.",
+              "error": error.message
+          };
+      }
+    },
 
 
     // NOTE: Medication
@@ -315,7 +330,55 @@ module.exports = {
             ctx.throw(400, 'Unable to create meal. Please check the data and try again.');
       }
   },
+    async overview(ctx) {
+      try {
+        const queryCount = ctx.query.count;
+        let count = parseInt(queryCount) || 0;
 
+        const model = 'api::meal.meal';
+
+        // 1. Get the total count of meals
+        const totalMeals = await strapi.entityService.count(model);
+
+        // 2. Adjust count if it exceeds the total number of meals
+        count = Math.min(count, totalMeals);
+
+        // 3. Fetch random meals (if count is greater than 0)
+        let randomMeals = [];
+        if (count > 0) {
+            // Create a Set to store unique random offsets
+            const randoms = [];
+
+            while (randoms.length < count && randoms.length < totalMeals) {
+                const randomOffset = Math.floor(Math.random() * totalMeals);
+
+                let entityOrNull = await strapi.entityService.findOne(model, randomOffset, {
+                  populate: {
+                    ingredients: {  // Die Dynamic Zone "ingredients" wird beachtet
+                      populate: ['name', 'amount', 'unit'],
+                    },
+                    mainImage: true,
+                    category: true
+                  }
+                });
+
+                if (entityOrNull ) { // && !randoms.some(item => item.id === entityOrNull.id)
+                  randoms.push(entityOrNull);
+                }
+            }
+
+            randomMeals = randoms
+        }
+
+        for (const meal of randomMeals) {
+          removeComponentFieldFromIngredients(meal);
+        }
+
+        ctx.body = removeTimestamps(randomMeals);
+      } catch (err) {
+        ctx.internalServerError('An error occurred while fetching random meals', err);
+      }
+    },
 
     // NOTE: MealPlan
     async syncDeviceMealPlanDayData(ctx) {
@@ -375,6 +438,8 @@ module.exports = {
 
         handleEmptyResponseBody(ctx, 'No medication found after the specified timestamp')
     }
+
+
 };
 
 async function avgWeightFromUsers() {
@@ -410,8 +475,6 @@ async function avgWeightFromUsers() {
 }
 
 async function avgDurationsFromUsers() {
-  const x = "api::countdown-timer.countdown-timer"
-
   const uniqueUserIds = await strapi.db.query('api::water-intake.water-intake').findMany({
       select: ['userId'],
       distinct: true,
@@ -472,4 +535,14 @@ function removeComponentFieldFromIngredients(meal) {
     });
   }
   return meal;
+}
+
+function generateId() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const blocks = Array.from({ length: 4 }, () =>
+    Array.from({ length: 4 }, () =>
+      chars.charAt(Math.floor(Math.random() * chars.length))
+    ).join('')
+  );
+  return blocks.join('-');
 }

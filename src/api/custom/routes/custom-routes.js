@@ -19,6 +19,8 @@ module.exports = {
         // Description: Retrieves statistical data about various entities within the application.
         GET(controller, "", "getApiStatistics"),
 
+        GET(controller, "", "generateID"),
+
         // Endpoint: https://{{base_url}}/api/medication/syncDeviceMedicationData
         // Description: Syncs medication data from the device to the server.
         // Required:
@@ -53,6 +55,8 @@ module.exports = {
         //   - Body: (object) - The recipe data to be stored, including name, description, ingredients, etc.
         //   - Bearer Token: An authorization token is required in the header for authentication.
         POST(controller, "recipes", "createRecipe"),
+
+        GET(controller, "recipes", "overview"),
 
         // Endpoint: https://{{base_url}}/api/mealPlan/syncDeviceMealPlanDayData
         // Description: Syncs meal plan data from the device to the server.
