@@ -117,3 +117,8 @@ This Postman Collection contains API requests for interacting with the BauchGlü
 - Check that the request uses the correct environment variables (e.g. {{base_url}}/api/endpoint).
 - Click "Send" to complete the request.
 - Review the response at the bottom to ensure the request was successful and the expected data was returned.
+
+
+## Recipes
+[Recipes for gastric bypass operated people.](https://www.lecker-ohne.de/)
+
