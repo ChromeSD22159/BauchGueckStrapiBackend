@@ -61,6 +61,8 @@ module.exports = {
 
         GET(recipesController, "recipes", "overview"),
 
+        GET(recipesController, "meal", "getUpdatedMealEntries"),
+
         // Endpoint: https://{{base_url}}/api/mealPlan/syncDeviceMealPlanDayData
         // Description: Syncs meal plan data from the device to the server.
         // Required:

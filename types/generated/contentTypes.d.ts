@@ -1196,6 +1196,36 @@ export interface ApiShoppingListItemShoppingListItem
   };
 }
 
+export interface ApiStartUpMealStartUpMeal extends Schema.SingleType {
+  collectionName: 'start_up_meals';
+  info: {
+    singularName: 'start-up-meal';
+    pluralName: 'start-up-meals';
+    displayName: 'startUpMeal';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    meals: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::start-up-meal.start-up-meal',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::start-up-meal.start-up-meal',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiTimeStampTimeStamp extends Schema.SingleType {
   collectionName: 'time_stamps';
   info: {
@@ -1329,6 +1359,7 @@ declare module '@strapi/types' {
       'api::recipe-category.recipe-category': ApiRecipeCategoryRecipeCategory;
       'api::shopping-list.shopping-list': ApiShoppingListShoppingList;
       'api::shopping-list-item.shopping-list-item': ApiShoppingListItemShoppingListItem;
+      'api::start-up-meal.start-up-meal': ApiStartUpMealStartUpMeal;
       'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;
       'api::weight.weight': ApiWeightWeight;

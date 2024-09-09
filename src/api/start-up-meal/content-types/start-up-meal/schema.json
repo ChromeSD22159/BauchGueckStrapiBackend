@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "start_up_meals",
+  "info": {
+    "singularName": "start-up-meal",
+    "pluralName": "start-up-meals",
+    "displayName": "startUpMeal",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "meals": {
+      "type": "string"
+    }
+  }
+}

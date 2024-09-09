@@ -1,12 +1,15 @@
 const {
   handleEmptyUserParameter,
   handleSearchQueryMustContain3Chars,
-  removeTimestamps
+  removeTimestamps, userIdToString, validateTimerStamp, handleEmptyResponseBody, removeComponentFieldFromIngredients
 } = require("../../../utils/validation");
 
 const {
   calculateNutritionForRecipe
 } = require("../../../utils/GoogleAI");
+
+const mealModel = "api::meal.meal"
+const recipeCategory = "api::recipe-category.recipe-category";
 
 module.exports = {
   async searchRecipes(ctx) {
@@ -34,7 +37,7 @@ module.exports = {
 
     // Abfrage ausführen und die Ergebnisse zurückgeben
     // Ergebnisse als Antwort senden
-    let result = await strapi.entityService.findMany('api::meal.meal', {
+    let result = await strapi.entityService.findMany(mealModel, {
       filters: filters,
       populate: {
         ingredients: {  // Die Dynamic Zone "ingredients" wird beachtet
@@ -47,15 +50,12 @@ module.exports = {
 
     // Über jedes Meal-Objekt in der result-Liste iterieren und das "__component"-Feld entfernen
     for (const meal of result) {
-      removeComponentFieldFromIngredients(meal);
+        removeComponentFieldFromIngredients(meal);
     }
 
     ctx.body = removeTimestamps(result);
   },
   async createRecipe(ctx) {
-    const mealModel = "api::meal.meal";
-    const recipeCategory = "api::recipe-category.recipe-category";
-
     let createdCategoryId = 0;
 
     const existingCategory = await strapi.db.query(recipeCategory).findOne({
@@ -113,10 +113,8 @@ module.exports = {
       const queryCount = ctx.query.count;
       let count = parseInt(queryCount) || 0;
 
-      const model = 'api::meal.meal';
-
       // 1. Get the total count of meals
-      const totalMeals = await strapi.entityService.count(model);
+      const totalMeals = await strapi.entityService.count(mealModel);
 
       // 2. Adjust count if it exceeds the total number of meals
       count = Math.min(count, totalMeals);
@@ -130,7 +128,7 @@ module.exports = {
         while (randoms.length < count && randoms.length < totalMeals) {
           const randomOffset = Math.floor(Math.random() * totalMeals);
 
-          let entityOrNull = await strapi.entityService.findOne(model, randomOffset, {
+          let entityOrNull = await strapi.entityService.findOne(mealModel, randomOffset, {
             populate: {
               ingredients: {  // Die Dynamic Zone "ingredients" wird beachtet
                 populate: ['name', 'amount', 'unit'],
@@ -152,5 +150,31 @@ module.exports = {
     } catch (err) {
       ctx.internalServerError('An error occurred while fetching random meals', err);
     }
+  },
+
+  async getUpdatedMealEntries(ctx) {
+      if (handleEmptyUserParameter(ctx)) return;
+
+      const userId = userIdToString(ctx.query.userId);
+
+      const timeStamp = validateTimerStamp(ctx)
+
+      let result = await strapi.entityService.findMany(mealModel, {
+          filters: {
+              userId: userId,
+              updatedAtOnDevice: { $gt: timeStamp },
+          },
+          populate: {
+              ingredients: {  // Die Dynamic Zone "ingredients" wird beachtet
+                  populate: ['name', 'amount', 'unit'],
+              },
+              mainImage: true,
+              category: true
+          }
+      });
+
+      ctx.body = removeTimestamps(result);
+
+      handleEmptyResponseBody(ctx, 'No Meals found after the specified timestamp')
   },
 }

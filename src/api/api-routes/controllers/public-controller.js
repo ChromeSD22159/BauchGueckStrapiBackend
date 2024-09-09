@@ -2,27 +2,29 @@ const {
   validateUserId,
 } = require('../../../utils/validation');
 
+
+
 module.exports = {
   async getCurrentTimeStamp(ctx) {
-    try {
-      const currentTimestamp = Date.now();
+      try {
+          const currentTimestamp = Date.now();
 
-      const hoursOffset = parseInt(ctx.query.hours) || 2;
+          const hoursOffset = parseInt(ctx.query.hours) || 2;
 
-      const offsetMilliseconds = hoursOffset * 60 * 60 * 1000;
+          const offsetMilliseconds = hoursOffset * 60 * 60 * 1000;
 
-      ctx.body = {
-        previewTimeSamp: currentTimestamp - offsetMilliseconds,
-        currentTimestamp: currentTimestamp,
-        futureTimeStamp: currentTimestamp + offsetMilliseconds
-      };
-    } catch (error) {
-      ctx.status = 500;
-      ctx.body = {
-        "message": "An error occurred while retrieving the timestamp.",
-        "error": error.message
-      };
-    }
+          ctx.body = {
+              previewTimeSamp: currentTimestamp - offsetMilliseconds,
+              currentTimestamp: currentTimestamp,
+              futureTimeStamp: currentTimestamp + offsetMilliseconds,
+          };
+      } catch (error) {
+          ctx.status = 500;
+          ctx.body = {
+              "message": "An error occurred while retrieving the timestamp.",
+              "error": error.message
+          };
+      }
   },
   async getApiStatistics(ctx) {
     try {

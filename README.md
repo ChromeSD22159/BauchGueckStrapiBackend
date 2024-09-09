@@ -63,6 +63,18 @@ yarn build
 - Default is 0, 
 - parameter: /api/overview?count=0
 
+`POST {{base_url}}/api/getStartUpMeals`
+- Required!  Bearer Token in the Authorization header.
+
+`POST {{base_url}}/api/getStartUpMealsCount`
+- Required!  Bearer Token in the Authorization header.
+- RETURN Integer of Items
+``` json
+{
+    "length": 3
+}
+```
+
 ### Meal Plan Endpoints
 `POST /api/mealPlan/syncDeviceMealPlanDayData` 
 - Syncs meal plan data from the device to the server.
