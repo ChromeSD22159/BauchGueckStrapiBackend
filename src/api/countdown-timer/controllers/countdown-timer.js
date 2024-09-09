@@ -6,12 +6,12 @@
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::countdown-timer.countdown-timer',    ({ strapi }) => ({
+module.exports = createCoreController('api::countdown-timer.countdown-timer', ({ strapi }) => ({
     ...createCoreController('api::countdown-timer.countdown-timer').actions,
 
-     // Add your custom lifecycle hooks
+     // Add your api-routes lifecycle hooks
      async beforeCreate(ctx) {
-        strapi.log.info('Content-Type:', ctx.is('application/json')); 
+        strapi.log.info('Content-Type:', ctx.is('application/json'));
         strapi.log.info('Origin:', ctx.get('origin'));
         strapi.log.info('Request Body (before):', ctx.request.body);
 
@@ -19,9 +19,9 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer',  
             ctx.request.body.data.updatedAtOnDevice = Date.now();
         }
      },
-   
+
      async beforeUpdate(ctx) {
-        strapi.log.info('Content-Type:', ctx.is('application/json')); 
+        strapi.log.info('Content-Type:', ctx.is('application/json'));
         strapi.log.info('Origin:', ctx.get('origin'));
         strapi.log.info('Request Body (before):', ctx.request.body);
 
@@ -29,4 +29,4 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer',  
             ctx.request.body.data.updatedAtOnDevice = Date.now();
         }
      }
-   }));
+ }));

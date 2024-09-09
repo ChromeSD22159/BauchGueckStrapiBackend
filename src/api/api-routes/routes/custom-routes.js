@@ -1,6 +1,9 @@
-const controller = "custom-controller."
 
-// Medication
+const publicController = "public-controller."
+const medicationController = "medication-controller."
+const recipesController = "recipes-controller."
+const mealPlanController = "meal-plan-controller."
+
 module.exports = {
     routes: [
         // Endpoint: https://{{base_url}}/api/getCurrentTimeStamp
@@ -13,20 +16,20 @@ module.exports = {
         //   - previewTimeSamp: (integer) - The previous timestamp.
         //   - currentTimestamp: (integer) - The current timestamp.
         //   - futureTimeStamp: (integer) - The future timestamp.
-        GET(controller, "", "getCurrentTimeStamp"),
+        GET(publicController, "", "getCurrentTimeStamp"),
 
         // Endpoint: https://{{base_url}}/api/getApiStatistics
         // Description: Retrieves statistical data about various entities within the application.
-        GET(controller, "", "getApiStatistics"),
+        GET(publicController, "", "getApiStatistics"),
 
-        GET(controller, "", "generateID"),
+        GET(publicController, "", "generateID"),
 
         // Endpoint: https://{{base_url}}/api/medication/syncDeviceMedicationData
         // Description: Syncs medication data from the device to the server.
         // Required:
         //   - Body: (array) - An array of medication data to be synchronized.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        POST(controller,"medication", "syncDeviceMedicationData"),
+        POST(medicationController,"medication", "syncDeviceMedicationData"),
 
         // Endpoint: https://{{base_url}}/api/medication/getUpdatedMedicationEntries
         // Description: Retrieves updated medication entries for a specific user based on a provided timestamp.
@@ -36,7 +39,7 @@ module.exports = {
         //     - Optional:
         //       - timeStamp: (integer) - The timestamp to filter entries. If not provided, the default is 0.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        GET(controller, "medication", "getUpdatedMedicationEntries"),
+        GET(medicationController, "medication", "getUpdatedMedicationEntries"),
 
         // Endpoint: https://{{base_url}}/api/recipes/searchRecipes
         // Description: Retrieves a list of recipes based on the search query. The results include public recipes and private recipes owned by the specified user.
@@ -47,23 +50,23 @@ module.exports = {
         //       - searchQuery: (string) - The search term to filter recipes by name. Must be at least 3 characters long.
         //       - timeStamp: (integer) - The timestamp to filter entries. If not provided, the default is 0.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        GET(controller, "recipes", "searchRecipes"),
+        GET(recipesController, "recipes", "searchRecipes"),
 
         // Endpoint: https://{{base_url}}/api/recipes/createRecipe
         // Description: Creates a new recipe and stores it in the database.
         // Required:
         //   - Body: (object) - The recipe data to be stored, including name, description, ingredients, etc.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        POST(controller, "recipes", "createRecipe"),
+        POST(recipesController, "recipes", "createRecipe"),
 
-        GET(controller, "recipes", "overview"),
+        GET(recipesController, "recipes", "overview"),
 
         // Endpoint: https://{{base_url}}/api/mealPlan/syncDeviceMealPlanDayData
         // Description: Syncs meal plan data from the device to the server.
         // Required:
         //   - Body: (array) - An array of meal plan day data to be synchronized.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        POST(controller,"mealPlan", "syncDeviceMealPlanDayData"),
+        POST(mealPlanController,"mealPlan", "syncDeviceMealPlanDayData"),
 
         // Endpoint: https://{{base_url}}/api/mealPlan/getUpdatedMealPlanDayEntries
         // Description: Retrieves updated meal plan day entries for a specific user based on a provided timestamp.
@@ -73,7 +76,7 @@ module.exports = {
         //     - Optional:
         //       - timeStamp: (integer) - The timestamp to filter entries. If not provided, the default is 0.
         //   - Bearer Token: An authorization token is required in the header for authentication.
-        GET(controller, "mealPlan", "getUpdatedMealPlanDayEntries"),
+        GET(mealPlanController, "mealPlan", "getUpdatedMealPlanDayEntries"),
     ]
 };
 

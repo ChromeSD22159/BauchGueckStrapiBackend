@@ -91,9 +91,20 @@ function handleSearchQueryMustContain3Chars(ctx, error) {
   return false;
 }
 
+function removeComponentFieldFromIngredients(meal) {
+  if (meal.ingredients && Array.isArray(meal.ingredients)) {
+    meal.ingredients = meal.ingredients.map(ingredient => {
+      const { __component, ...rest } = ingredient;
+      return rest;
+    });
+  }
+  return meal;
+}
+
 module.exports = {
   stringToInteger,
   unixToISO,
+  removeComponentFieldFromIngredients,
   handleEmptyResponseBody,
   handleEmptyUserParameter,
   handleSearchQueryMustContain3Chars,

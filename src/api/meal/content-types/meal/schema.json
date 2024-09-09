@@ -27,6 +27,21 @@
     "preparation": {
       "type": "text"
     },
+    "preparationTimeInMinutes": {
+      "type": "integer"
+    },
+    "protein": {
+      "type": "decimal"
+    },
+    "fat": {
+      "type": "decimal"
+    },
+    "sugar": {
+      "type": "decimal"
+    },
+    "kcal": {
+      "type": "decimal"
+    },
     "isSnack": {
       "type": "boolean",
       "default": false

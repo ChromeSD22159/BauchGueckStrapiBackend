@@ -933,6 +933,11 @@ export interface ApiMealMeal extends Schema.CollectionType {
     name: Attribute.String;
     description: Attribute.Text;
     preparation: Attribute.Text;
+    preparationTimeInMinutes: Attribute.Integer;
+    protein: Attribute.Decimal;
+    fat: Attribute.Decimal;
+    sugar: Attribute.Decimal;
+    kcal: Attribute.Decimal;
     isSnack: Attribute.Boolean & Attribute.DefaultTo<false>;
     isPrivate: Attribute.Boolean & Attribute.DefaultTo<false>;
     isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;

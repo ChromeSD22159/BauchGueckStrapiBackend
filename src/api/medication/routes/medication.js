@@ -58,7 +58,7 @@ module.exports = {
         {
             method: "POST",
             path: "/medication/updateRemoteData",
-            handler: "custom-medications.updateRemoteData",
+            handler: "api-routes-medications.updateRemoteData",
             config: {
                 policies: []
             }
@@ -66,7 +66,7 @@ module.exports = {
         {
           method: "GET",
           path: "/medication/findUpdated",
-          handler: "custom-medications.findUpdated",
+          handler: "api-routes-medications.findUpdated",
           config: {
             policies: []
           }

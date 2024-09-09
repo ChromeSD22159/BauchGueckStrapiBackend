@@ -41,6 +41,9 @@ yarn build
 `GET /api/getApiStatistics`
 - Retrieves statistical data about various entities within the application.
 
+`GET /api/generateID`
+- Generate uniqueIDs
+
 ### Medication Endpoints
 `POST /api/medication/syncDeviceMedicationData`
 - Syncs medication data from the device to the server.
@@ -53,7 +56,12 @@ yarn build
 - Retrieves a list of recipes based on the search query, including public and private recipes owned by the user.
 
 `POST /api/recipes/createRecipe`
-- Creates a new recipe and stores it in the database.
+- Required to user /api/upload/ before an need the imageId for generating an Recipe!!!
+- Creates a new recipe and stores it in the database. And Generate Nutrition by Google Gemini!!!
+
+`POST /api/overview`
+- Default is 0, 
+- parameter: /api/overview?count=0
 
 ### Meal Plan Endpoints
 `POST /api/mealPlan/syncDeviceMealPlanDayData` 
