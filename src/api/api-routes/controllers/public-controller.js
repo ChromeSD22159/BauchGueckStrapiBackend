@@ -27,7 +27,7 @@ module.exports = {
             };
         }
     },
-    async getApiStatistics(ctx) {
+    async appStatistics(ctx) {
       try {
         const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
         const totalMealPlans = await strapi.entityService.count('api::meal-plan-day.meal-plan-day');

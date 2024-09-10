@@ -21,7 +21,7 @@ module.exports = {
 
         // Endpoint: https://{{base_url}}/api/getApiStatistics
         // Description: Retrieves statistical data about various entities within the application.
-        GET(publicController, "", "getApiStatistics"),
+        GET(publicController, "", "appStatistics"),
 
         GET(publicController, "", "generateID"),
 

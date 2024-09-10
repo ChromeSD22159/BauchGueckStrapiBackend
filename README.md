@@ -38,7 +38,7 @@ yarn build
 `GET /api/getCurrentTimeStamp`
 - Retrieves the current, previous, and future timestamps for synchronization purposes.
 
-`GET /api/getApiStatistics`
+`GET /api/appStatistics`
 - Retrieves statistical data about various entities within the application.
 
 `GET /api/generateID`
