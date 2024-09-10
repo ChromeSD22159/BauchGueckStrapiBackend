@@ -1124,21 +1124,24 @@ export interface ApiShoppingListShoppingList extends Schema.CollectionType {
     singularName: 'shopping-list';
     pluralName: 'shopping-lists';
     displayName: 'ShoppingList';
+    description: '';
   };
   options: {
     draftAndPublish: false;
   };
   attributes: {
+    name: Attribute.String;
     shoppingListId: Attribute.String;
+    userId: Attribute.String;
+    description: Attribute.String;
     startDate: Attribute.String;
     endDate: Attribute.String;
-    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    note: Attribute.String;
+    isDeleted: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<false>;
     updatedAtOnDevice: Attribute.BigInteger;
-    items: Attribute.Relation<
-      'api::shopping-list.shopping-list',
-      'oneToMany',
-      'api::shopping-list-item.shopping-list-item'
-    >;
+    itemsString: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1149,47 +1152,6 @@ export interface ApiShoppingListShoppingList extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::shopping-list.shopping-list',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiShoppingListItemShoppingListItem
-  extends Schema.CollectionType {
-  collectionName: 'shopping_list_items';
-  info: {
-    singularName: 'shopping-list-item';
-    pluralName: 'shopping-list-items';
-    displayName: 'ShoppingListItem';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    shoppingItemId: Attribute.String;
-    shoppingListId: Attribute.Relation<
-      'api::shopping-list-item.shopping-list-item',
-      'manyToOne',
-      'api::shopping-list.shopping-list'
-    >;
-    ingredientName: Attribute.String;
-    quantity: Attribute.Decimal;
-    unit: Attribute.String;
-    isChecked: Attribute.Boolean;
-    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
-    updatedAtOnDevice: Attribute.BigInteger;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::shopping-list-item.shopping-list-item',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::shopping-list-item.shopping-list-item',
       'oneToOne',
       'admin::user'
     > &
@@ -1359,7 +1321,6 @@ declare module '@strapi/types' {
       'api::medication.medication': ApiMedicationMedication;
       'api::recipe-category.recipe-category': ApiRecipeCategoryRecipeCategory;
       'api::shopping-list.shopping-list': ApiShoppingListShoppingList;
-      'api::shopping-list-item.shopping-list-item': ApiShoppingListItemShoppingListItem;
       'api::start-up-meal.start-up-meal': ApiStartUpMealStartUpMeal;
       'api::time-stamp.time-stamp': ApiTimeStampTimeStamp;
       'api::water-intake.water-intake': ApiWaterIntakeWaterIntake;

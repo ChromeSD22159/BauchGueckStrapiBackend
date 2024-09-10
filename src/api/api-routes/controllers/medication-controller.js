@@ -8,30 +8,30 @@ const {
 
 module.exports = {
     async getUpdatedMedicationEntries(ctx) {
-      if (handleEmptyUserParameter(ctx)) return;
+        if (handleEmptyUserParameter(ctx)) return;
 
-      const userId = userIdToString(ctx.query.userId);
+        const userId = userIdToString(ctx.query.userId);
 
-      const timeStamp = validateTimerStamp(ctx)
+        const timeStamp = validateTimerStamp(ctx)
 
-      let result = await strapi.entityService.findMany('api::medication.medication', {
-        filters: {
-          userId: userId,
-          updatedAtOnDevice: { $gt: timeStamp },
-        },
-        populate: {
-          intake_times: {
-            filters: {
-              updatedAtOnDevice: {$gt: timeStamp}, // Filter intake times
-            },
-            populate: 'intake_statuses',
+        let result = await strapi.entityService.findMany('api::medication.medication', {
+          filters: {
+            userId: userId,
+            updatedAtOnDevice: { $gt: timeStamp },
           },
-        },
-      });
+          populate: {
+            intake_times: {
+              filters: {
+                updatedAtOnDevice: {$gt: timeStamp}, // Filter intake times
+              },
+              populate: 'intake_statuses',
+            },
+          },
+        });
 
-      ctx.body = removeTimestamps(result);
+        ctx.body = removeTimestamps(result);
 
-      handleEmptyResponseBody(ctx, 'No medication found after the specified timestamp')
+        handleEmptyResponseBody(ctx, 'No medication found after the specified timestamp')
     },
     async syncDeviceMedicationData(ctx) {
       const medicationsFromApp = ctx.request.body;
@@ -49,12 +49,12 @@ module.exports = {
 
         // 2. wenn zugesendete gelöscht ist update Strapi
         if (medication.isDeleted) {
-          if (medicationOrNull) {
-            await strapi.entityService.update('api::medication.medication', medicationOrNull.id, {
-              data: { isDeleted: true },
-            });
-          }
-          continue;
+            if (medicationOrNull) {
+                await strapi.entityService.update('api::medication.medication', medicationOrNull.id, {
+                    data: { isDeleted: true },
+                });
+            }
+            continue;
         }
 
         // 3. set idOrNull
@@ -138,7 +138,7 @@ module.exports = {
       }
 
       ctx.send({
-        message: 'Sync completed successfully'
+          message: 'Sync completed successfully'
       });
     },
 }

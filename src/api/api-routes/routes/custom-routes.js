@@ -3,6 +3,7 @@ const publicController = "public-controller."
 const medicationController = "medication-controller."
 const recipesController = "recipes-controller."
 const mealPlanController = "meal-plan-controller."
+const shoppingListController = "shopping-list-controller."
 
 module.exports = {
     routes: [
@@ -78,6 +79,9 @@ module.exports = {
         //       - timeStamp: (integer) - The timestamp to filter entries. If not provided, the default is 0.
         //   - Bearer Token: An authorization token is required in the header for authentication.
         GET(mealPlanController, "mealPlan", "getUpdatedMealPlanDayEntries"),
+
+        POST(shoppingListController,"shoppingList", "syncDeviceShoppingListData"),
+        GET(shoppingListController,"shoppingList", "getUpdatedShoppingListEntries"),
     ]
 };
 
