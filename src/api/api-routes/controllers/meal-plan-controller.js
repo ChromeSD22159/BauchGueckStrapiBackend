@@ -6,6 +6,7 @@ const {
   removeTimestamps,
   handleEmptyResponseBody
 } = require("../../../utils/validation");
+
 module.exports = {
   async syncDeviceMealPlanDayData(ctx) {
     if(!validateRequestBodyIsArray(ctx)) return;

@@ -30,7 +30,8 @@ module.exports = {
     async getApiStatistics(ctx) {
       try {
         const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
-
+        const totalMealPlans = await strapi.entityService.count('api::meal-plan-day.meal-plan-day');
+        const totalMealPlansSpots = await strapi.entityService.count('api::meal-plan-slot.meal-plan-slot');
         const totalMeal = await strapi.entityService.count('api::meal.meal');
         const totalMedication = await strapi.entityService.count('api::medication.medication');
         const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time');
@@ -46,7 +47,9 @@ module.exports = {
           totalIntakeTimes,
           totalIntakeStatus,
           weightsEntries,
-          waterIntakesEntries
+          waterIntakesEntries,
+          totalMealPlansSpots,
+          totalMealPlans
         ]
 
         totalEntriesArray.forEach(count => {
@@ -59,7 +62,10 @@ module.exports = {
         let avgStatusPerUser = avgMedicationsData.avgStatusPerUser
         let avgTimerPerUser = avgMedicationsData.avgTimerPerUser
         return {
-
+          mealPlan: {
+            totalMealPlansSpots,
+            totalMealPlans
+          },
           medications: {
             totalMedication,
             totalIntakeTimes,
