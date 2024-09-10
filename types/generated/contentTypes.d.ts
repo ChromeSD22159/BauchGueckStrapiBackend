@@ -947,13 +947,13 @@ export interface ApiMealMeal extends Schema.CollectionType {
       'manyToOne',
       'api::recipe-category.recipe-category'
     >;
-    mealPlanSlots: Attribute.Relation<
-      'api::meal.meal',
-      'manyToOne',
-      'api::meal-plan-slot.meal-plan-slot'
-    >;
     mainImage: Attribute.Media<'images'>;
     ingredients: Attribute.DynamicZone<['recipe.single-ingredient']>;
+    mealPlanSlots: Attribute.Relation<
+      'api::meal.meal',
+      'oneToMany',
+      'api::meal-plan-slot.meal-plan-slot'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::meal.meal', 'oneToOne', 'admin::user'> &
@@ -1007,6 +1007,7 @@ export interface ApiMealPlanSlotMealPlanSlot extends Schema.CollectionType {
     singularName: 'meal-plan-slot';
     pluralName: 'meal-plan-slots';
     displayName: 'MealPlanSlot';
+    description: '';
   };
   options: {
     draftAndPublish: false;
@@ -1018,7 +1019,7 @@ export interface ApiMealPlanSlotMealPlanSlot extends Schema.CollectionType {
       'manyToOne',
       'api::meal-plan-day.meal-plan-day'
     >;
-    mealId: Attribute.Relation<
+    meal: Attribute.Relation<
       'api::meal-plan-slot.meal-plan-slot',
       'manyToOne',
       'api::meal.meal'

@@ -31,7 +31,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::meal-plan-slot.meal-plan-slot",
-      "mappedBy": "mealPlanDay"
+      "mappedBy": "dayId"
     }
   }
 }

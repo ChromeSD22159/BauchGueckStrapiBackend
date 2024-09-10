@@ -54,7 +54,15 @@ module.exports = {
       populate: {
         mealPlanSlots: {
           populate: {
-            mealId: true,
+              meal: {
+                populate: {
+                  ingredients: {
+                      populate: ['name', 'amount', 'unit'],
+                  },
+                  mainImage: true,
+                  category: true
+                }
+              }
           },
         },
       },

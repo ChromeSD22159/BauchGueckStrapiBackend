@@ -1,320 +1,742 @@
 {
-	"info": {
-		"_postman_id": "5fb9d74a-ca6b-49f5-818d-8806bdbe42e6",
-		"name": "BauchGlück Api",
-		"description": "This document describes the different routes of the BauchGlückApi and how they can be tested with Postman. Additionally, it explains how two environment variables can be set up to switch between the local development environment and the live environment.\n\n1. **KTOR LOCAL**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `http://localhost:8080` (Customize to your local URL)\n        \n    - **Current Value**: `http://localhost:8080`\n        \n2. **KTOR ProthesenApi Live**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`\n        \n    - **Current Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "12938676"
-	},
-	"item": [
-		{
-			"name": "CountdownTimer",
-			"item": [
-				{
-					"name": "Delete Multable Timer",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n   {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/countdown-timers/delete-timer-list",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"countdown-timers",
-								"delete-timer-list"
-							],
-							"query": [
-								{
-									"key": "timers",
-									"value": "12,23,34",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CountdownTimerList by UserId",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/timer-list?userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"timer-list"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "{{userId}}",
-									"description": "Frederik`s uid"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "InsertOrUpdate Timer by List",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n  {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": "{{base_url}}/api/countdown-timers/update-or-insert"
-					},
-					"response": []
-				},
-				{
-					"name": "fetchTimersAfterTimeStamp",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/timer/fetchTimersAfterTimeStamp?timeStamp=1724586143893&userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"timer",
-								"fetchTimersAfterTimeStamp"
-							],
-							"query": [
-								{
-									"key": "timeStamp",
-									"value": "1724586143893"
-								},
-								{
-									"key": "userId",
-									"value": "{{userId}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Weight",
-			"item": [
-				{
-					"name": "GetWeightbyUserId",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/weights-list?userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"weights-list"
-							],
-							"query": [
-								{
-									"key": "userId",
-									"value": "{{userId}}",
-									"description": "Frederik`s uid"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "fetchWeightAfterTimeStamp",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var template = `",
-									"<style type=\"text/css\">",
-									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
-									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
-									"    .tftable tr {background-color:#ffffff;}",
-									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
-									"    .tftable tr:hover {background-color:#e0ffff;}",
-									"</style>",
-									"",
-									"<table class=\"tftable\" border=\"1\">",
-									"    <tr>",
-									"        <th>ID</th>",
-									"        <th>User ID</th>",
-									"        <th>Value</th>",
-									"        <th>Created At</th>",
-									"        <th>Updated At</th>",
-									"        <th>Weight ID</th>",
-									"        <th>Is Deleted</th>",
-									"        <th>Updated At On Device</th>",
-									"    </tr>",
-									"    ",
-									"    {{#each response}}",
-									"        <tr id=row_{{@key}}>",
-									"            <td>{{id}}</td>",
-									"            <td>{{userId}}</td>",
-									"            <td>{{value}}</td>",
-									"            <td>{{createdAt}}</td>",
-									"            <td>{{updatedAt}}</td>",
-									"            <td>{{weightId}}</td>",
-									"            <td>{{isDeleted}}</td>",
-									"            <td>{{updatedAtOnDevice}}</td>",
-									"        </tr>",
-									"    {{/each}}",
-									"</table>",
-									"`;",
-									"",
-									"function constructVisualizerPayload() {",
-									"    return {response: pm.response.json()}",
-									"}",
-									"",
-									"pm.visualizer.set(template, constructVisualizerPayload());"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"protocolVersion": "auto"
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/weight/fetchWeightsAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"weight",
-								"fetchWeightsAfterTimeStamp"
-							],
-							"query": [
-								{
-									"key": "timeStamp",
-									"value": "1714609614186"
-								},
-								{
-									"key": "userId",
-									"value": "{{userId}}"
-								},
-								{
-									"key": "timeStamp",
-									"value": "0",
-									"description": "Test Route",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Medication",
-			"item": [
-				{
-					"name": "fetchMedicationsAfterTimeStamp",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/medication/fetchMedicationsAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"medication",
-								"fetchMedicationsAfterTimeStamp"
-							],
-							"query": [
-								{
-									"key": "timeStamp",
-									"value": "1714609614186"
-								},
-								{
-									"key": "userId",
-									"value": "{{userId}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "WaterIntake",
-			"item": [
-				{
-					"name": "fetchWaterIntakesAfterTimeStamp",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/water-intake/fetchWaterIntakesAfterTimeStamp?timeStamp=1714609614186&userId={{userId}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"water-intake",
-								"fetchWaterIntakesAfterTimeStamp"
-							],
-							"query": [
-								{
-									"key": "timeStamp",
-									"value": "1714609614186"
-								},
-								{
-									"key": "userId",
-									"value": "{{userId}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "CurrentTimeStamp",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "{{base_url}}/api/currentTimeStamp"
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "5fb9d74a-ca6b-49f5-818d-8806bdbe42e6",
+    "name": "BauchGlück Api",
+    "description": "This document describes the different routes of the BauchGlückApi and how they can be tested with Postman. Additionally, it explains how two environment variables can be set up to switch between the local development environment and the live environment.\n\n1. **KTOR LOCAL**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `http://localhost:8080` (Customize to your local URL)\n        \n    - **Current Value**: `http://localhost:8080`\n        \n2. **KTOR ProthesenApi Live**\n    \n    - **Variable Name**: `base_url`\n        \n    - **Initial Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`\n        \n    - **Current Value**: `https://api.appsbyfrederikkohler.de/bauchglueck`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "12938676"
+  },
+  "item": [
+    {
+      "name": "Authenticated",
+      "item": [
+        {
+          "name": "WaterIntake",
+          "item": [
+            {
+              "name": "fetchItemsAfterTimeStamp",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/water-intake/fetchItemsAfterTimeStamp?timeStamp=1723586143898&userId={{userId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "water-intake",
+                    "fetchItemsAfterTimeStamp"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeStamp",
+                      "value": "1723586143898"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "{{userId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Medication",
+          "item": [
+            {
+              "name": "!GetUpdatedMedicationEntries",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/medication/getUpdatedMedicationEntries?timeStamp=1724624830576&userId={{userId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "medication",
+                    "getUpdatedMedicationEntries"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeStamp",
+                      "value": "1724624830576"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "{{userId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "!syncDeviceMedicationData",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n    {\n        \"id\": 1,\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Ibuprofen\",\n        \"dosage\": \"400mg\",\n        \"isDeleted\": false,\n        \"medicationId\": \"ibuprofen-123\",\n        \"updatedAtOnDevice\": \"1823586143893\",\n        \"intake_times\": [\n            {\n                \"id\": 1,\n                \"intakeTime\": \"08:00\",\n                \"updatedAtOnDevice\": \"1823586143893\",\n                \"intake_statuses\": [\n                    {\n                        \"id\": 1,\n                        \"date\": \"2024-09-02T06:30:00.000Z\",\n                        \"isTaken\": true,\n                        \"updatedAtOnDevice\": \"1823586143893\"\n                    }\n                ]\n            }\n        ]\n    }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base_url}}/api/medication/syncDeviceMedicationData"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Weight",
+          "item": [
+            {
+              "name": "GetWeightbyUserId",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/weights-list?userId={{userId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "weights-list"
+                  ],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "{{userId}}",
+                      "description": "Frederik`s uid"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "fetchItemsAfterTimeStamp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var template = `",
+                      "<style type=\"text/css\">",
+                      "    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+                      "    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+                      "    .tftable tr {background-color:#ffffff;}",
+                      "    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+                      "    .tftable tr:hover {background-color:#e0ffff;}",
+                      "</style>",
+                      "",
+                      "<table class=\"tftable\" border=\"1\">",
+                      "    <tr>",
+                      "        <th>ID</th>",
+                      "        <th>User ID</th>",
+                      "        <th>Value</th>",
+                      "        <th>Created At</th>",
+                      "        <th>Updated At</th>",
+                      "        <th>Weight ID</th>",
+                      "        <th>Is Deleted</th>",
+                      "        <th>Updated At On Device</th>",
+                      "    </tr>",
+                      "    ",
+                      "    {{#each response}}",
+                      "        <tr id=row_{{@key}}>",
+                      "            <td>{{id}}</td>",
+                      "            <td>{{userId}}</td>",
+                      "            <td>{{value}}</td>",
+                      "            <td>{{createdAt}}</td>",
+                      "            <td>{{updatedAt}}</td>",
+                      "            <td>{{weightId}}</td>",
+                      "            <td>{{isDeleted}}</td>",
+                      "            <td>{{updatedAtOnDevice}}</td>",
+                      "        </tr>",
+                      "    {{/each}}",
+                      "</table>",
+                      "`;",
+                      "",
+                      "function constructVisualizerPayload() {",
+                      "    return {response: pm.response.json()}",
+                      "}",
+                      "",
+                      "pm.visualizer.set(template, constructVisualizerPayload());"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "protocolVersion": "auto"
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/weight/fetchItemsAfterTimeStamp",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "weight",
+                    "fetchItemsAfterTimeStamp"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeStamp",
+                      "value": "1734893059073",
+                      "disabled": true
+                    },
+                    {
+                      "key": "userId",
+                      "value": "{{userId}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "timeStamp",
+                      "value": "0",
+                      "description": "Test Route",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "CountdownTimer",
+          "item": [
+            {
+              "name": "Update Timer by StrapiID",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n   {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/countdown-timers/77",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "countdown-timers",
+                    "77"
+                  ],
+                  "query": [
+                    {
+                      "key": "timers",
+                      "value": "12,23,34",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Timer by StrapiID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "GET",
+                "header": [],
+                "url": "{{base_url}}/api/countdown-timers/77"
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Timers",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n        \"id\": 7,\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n    }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base_url}}/api/countdown-timers"
+              },
+              "response": []
+            },
+            {
+              "name": "fetchItemsAfterTimeStamp",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{bauchGlueckApiToken}}"
+                  }
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/timer/fetchItemsAfterTimeStamp?timeStamp=1726061644030&userId={{userId}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "timer",
+                    "fetchItemsAfterTimeStamp"
+                  ],
+                  "query": [
+                    {
+                      "key": "timeStamp",
+                      "value": "1726061644030"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "{{userId}}"
+                    },
+                    {
+                      "key": "timeStamp",
+                      "value": "0",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create new Timer",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": " {\n        \"timerId\": \"2\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Timer3\",\n        \"duration\": \"20\",\n        \"startDate\": null,\n        \"endDate\": null,\n        \"timerState\": \"notRunning\",\n        \"showActivity\": true,\n        \"createdAt\": \"2024-08-17T11:41:55.914Z\",\n        \"updatedAt\": \"2024-08-22T15:13:44.759Z\",\n        \"isDeleted\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": "{{base_url}}/api/countdown-timers"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Timer by StrapiID",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{base_url}}/api/countdown-timers/77"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "CurrentTimeStamp",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/currentTimeStamp?hours=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "currentTimeStamp"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "hallo",
+                  "disabled": true
+                },
+                {
+                  "key": "hours",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Recipe",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n        \"id\": 234234234,\n        \"updatedAtOnDevice\": null,\n        \"mealId\": \"ipaU3IHasdNio4wF2En4nWse\",\n        \"userId\": \"ipEn4nWseaU3IHrMV9Wy4Nio4wF2\",\n        \"name\": \"Apfel-Hafer-Müsli-asdsasd\",\n        \"description\": \"Apfel-Hafer-Müsli-asdsasd\",\n        \"isSnack\": false,\n        \"isPrivate\": false,\n        \"isDeleted\": false,\n        \"preparation\": \"Apfel-Hafer-Müsli-asdsasd\",\n        \"preparationTimeInMinutes\": 15,\n        \"ingredients\": [\n            {\n                \"__component\": \"recipe.single-ingredient\",\n                \"id\": 1,\n                \"name\": \"Magerquark\",\n                \"amount\": \"100\",\n                \"unit\": \"gramm\"\n            },\n            {\n                \"__component\": \"recipe.single-ingredient\",\n                \"id\": 2,\n                \"name\": \"Wasser\",\n                \"amount\": \"2\",\n                \"unit\": \"EL\"\n            },\n            {\n                \"__component\": \"recipe.single-ingredient\",\n                \"id\": 3,\n                \"name\": \"Zimt\",\n                \"amount\": \"21\",\n                \"unit\": \"priese\"\n            },\n            {\n                \"__component\": \"recipe.single-ingredient\",\n                \"id\": 4,\n                \"name\": \"Apfel\",\n                \"amount\": \"1/2\",\n                \"unit\": \"Stk\"\n            },\n            {\n                \"__component\": \"recipe.single-ingredient\",\n                \"id\": 5,\n                \"name\": \"Haselnuss, gemahlen\",\n                \"amount\": \"1\",\n                \"unit\": \"EL\"\n            }\n        ],\n        \"mainImage\": {\n            \"id\": 3\n        },\n        \"category\": {\n            \"id\": 1,\n            \"categoryId\": \"5555\",\n            \"name\": \"Getränke\"\n        }\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/api/recipes/createRecipe"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Recipes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/meals?populate=*",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "meals"
+              ],
+              "query": [
+                {
+                  "key": "populate",
+                  "value": "*"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Recipe",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recipes/searchRecipes?userId=asdasd&searchQuery=Mango",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recipes",
+                "searchRecipes"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "asdasd"
+                },
+                {
+                  "key": "searchQuery",
+                  "value": "Mango"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "!Get Overview for Recipes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/recipes/overview?count=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "recipes",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "count",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": "postman-cloud:///1ef6e0bc-f57d-4430-b26f-3edce2fd5615"
+                }
+              ]
+            },
+            "url": "{{base_url}}/api/upload/"
+          },
+          "response": []
+        },
+        {
+          "name": "Generate AI Recipe",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contents\":{\n        \"parts\":[\n            {\n            \"text\": \"Gib mir ein JSON-Objekt zurück, das ein Rezept für eine Person nach einem Magenbypass beschreibt. Das Objekt soll folgende Felder enthalten: name, description, isSnack, isPrivate, isDeleted, preparation, preparationTimeInMinutes, ingredients (als Array von Objekten mit den Feldern id, name, amount, unit), protein, fat, sugar, kcal. Beispiel:{\\n  \\\"name\\\": \\\"Eiskalter Hibiskusblütentee, mit frischer Zitrone\\\",\\n  \\\"description\\\": \\\"Eiskalter Hibiskusblütentee, mit frischer Zitrone. Das Getränk schmeckt gut gekühlt am besten. Wer mag, kann es noch etwas süßen.\\\",\\n  \\\"isSnack\\\": false,\\n  \\\"isPrivate\\\": false,\\n  \\\"isDeleted\\\": false,\\n  \\\"preparation\\\": \\\"1. Die getrockneten Hibiskusblüten mit den Zitronenscheiben in ein sauberes Glasgefäß geben und mit 1 Liter kaltem Wasser übergießen. Das Gefäß gut verschließen und für mindestens 2 Stunden in den Kühlschrank stellen.\\\",\\n  \\\"preparationTimeInMinutes\\\": 10,\\n  \\\"ingredients\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"name\\\": \\\"getrocknete Hibiskusblüten\\\",\\n      \\\"amount\\\": \\\"3\\\",\\n      \\\"unit\\\": \\\"TL\\\"\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"name\\\": \\\"frische Bio-Zitrone\\\",\\n      \\\"amount\\\": \\\"3\\\",\\n      \\\"unit\\\": \\\"Scheiben\\\"\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"name\\\": \\\"kaltes Wasser\\\",\\n      \\\"amount\\\": \\\"1\\\",\\n      \\\"unit\\\": \\\"L\\\"\\n    }\\n  ],\\n  \\\"protein\\\": 2.6,\\n  \\\"fat\\\": 14.6,\\n  \\\"sugar\\\": 10.5,\\n  \\\"kcal\\\": 262.5\\n}\"\n            }\n        ]\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCkMOAt4AV_-Ebu-WcJtZ6hEBKvp80e6aM",
+              "protocol": "https",
+              "host": [
+                "generativelanguage",
+                "googleapis",
+                "com"
+              ],
+              "path": [
+                "v1beta",
+                "models",
+                "gemini-1.5-flash-latest:generateContent"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "AIzaSyCkMOAt4AV_-Ebu-WcJtZ6hEBKvp80e6aM"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getUpdatedMealEntries",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/meal/getUpdatedMealEntries?timeStamp=1725703485448&userId={{userId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "meal",
+                "getUpdatedMealEntries"
+              ],
+              "query": [
+                {
+                  "key": "timeStamp",
+                  "value": "1725703485448"
+                },
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gemini generate Recipe",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contents\":{\n        \"parts\":[\n            {\n            \"text\": \"Gib mir ein JSON-Objekt zurück, das ein Rezept für eine Person nach einem Magenbypass beschreibt. Das Objekt soll folgende Felder enthalten: name, description, isSnack, isPrivate, isDeleted, preparation, preparationTimeInMinutes, ingredients (als Array von Objekten mit den Feldern id, name, amount, unit), protein, fat, sugar, kcal. Beispiel:{\\n  \\\"name\\\": \\\"Eiskalter Hibiskusblütentee, mit frischer Zitrone\\\",\\n  \\\"description\\\": \\\"Eiskalter Hibiskusblütentee, mit frischer Zitrone. Das Getränk schmeckt gut gekühlt am besten. Wer mag, kann es noch etwas süßen.\\\",\\n  \\\"isSnack\\\": false,\\n  \\\"isPrivate\\\": false,\\n  \\\"isDeleted\\\": false,\\n  \\\"preparation\\\": \\\"1. Die getrockneten Hibiskusblüten mit den Zitronenscheiben in ein sauberes Glasgefäß geben und mit 1 Liter kaltem Wasser übergießen. Das Gefäß gut verschließen und für mindestens 2 Stunden in den Kühlschrank stellen.\\\",\\n  \\\"preparationTimeInMinutes\\\": 10,\\n  \\\"ingredients\\\": [\\n    {\\n      \\\"id\\\": 1,\\n      \\\"name\\\": \\\"getrocknete Hibiskusblüten\\\",\\n      \\\"amount\\\": \\\"3\\\",\\n      \\\"unit\\\": \\\"TL\\\"\\n    },\\n    {\\n      \\\"id\\\": 2,\\n      \\\"name\\\": \\\"frische Bio-Zitrone\\\",\\n      \\\"amount\\\": \\\"3\\\",\\n      \\\"unit\\\": \\\"Scheiben\\\"\\n    },\\n    {\\n      \\\"id\\\": 3,\\n      \\\"name\\\": \\\"kaltes Wasser\\\",\\n      \\\"amount\\\": \\\"1\\\",\\n      \\\"unit\\\": \\\"L\\\"\\n    }\\n  ],\\n  \\\"protein\\\": 2.6,\\n  \\\"fat\\\": 14.6,\\n  \\\"sugar\\\": 10.5,\\n  \\\"kcal\\\": 262.5\\n}\"\n            }\n        ]\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=<key>",
+              "protocol": "https",
+              "host": [
+                "generativelanguage",
+                "googleapis",
+                "com"
+              ],
+              "path": [
+                "v1beta",
+                "models",
+                "gemini-1.5-flash-latest:generateContent"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "AIzaSyCkMOAt4AV_-Ebu-WcJtZ6hEBKvp80e6aM"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetStartUpMeals",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "token": "{{bauchGlueckApiToken}}"
+              }
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/getStartUpMeals"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "!getCurrentTimeStamp",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/getCurrentTimeStamp?hours=48",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "getCurrentTimeStamp"
+              ],
+              "query": [
+                {
+                  "key": "hours",
+                  "value": "48"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "!getApiStatistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/getApiStatistics"
+          },
+          "response": []
+        },
+        {
+          "name": "!GenerateID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/generateID"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }

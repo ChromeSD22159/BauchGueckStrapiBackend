@@ -69,7 +69,6 @@ module.exports = {
         //   - Body: (array) - An array of meal plan day data to be synchronized.
         //   - Bearer Token: An authorization token is required in the header for authentication.
         POST(mealPlanController,"mealPlan", "syncDeviceMealPlanDayData"),
-
         // Endpoint: https://{{base_url}}/api/mealPlan/getUpdatedMealPlanDayEntries
         // Description: Retrieves updated meal plan day entries for a specific user based on a provided timestamp.
         // Required:

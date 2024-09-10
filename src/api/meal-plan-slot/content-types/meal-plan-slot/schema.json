@@ -4,7 +4,8 @@
   "info": {
     "singularName": "meal-plan-slot",
     "pluralName": "meal-plan-slots",
-    "displayName": "MealPlanSlot"
+    "displayName": "MealPlanSlot",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -20,7 +21,7 @@
       "target": "api::meal-plan-day.meal-plan-day",
       "inversedBy": "mealPlanSlots"
     },
-    "mealId": {
+    "meal": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::meal.meal",

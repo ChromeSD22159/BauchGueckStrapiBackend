@@ -1,5 +1,5 @@
 const {
-  validateUserId,
+  validateUserId, unixToISO,
 } = require('../../../utils/validation');
 
 
@@ -17,6 +17,7 @@ module.exports = {
               previewTimeSamp: currentTimestamp - offsetMilliseconds,
               currentTimestamp: currentTimestamp,
               futureTimeStamp: currentTimestamp + offsetMilliseconds,
+              currentTimeString: new Date().toISOString(),
           };
       } catch (error) {
           ctx.status = 500;

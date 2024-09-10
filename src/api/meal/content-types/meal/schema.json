@@ -62,11 +62,6 @@
       "relation": "manyToOne",
       "target": "api::recipe-category.recipe-category"
     },
-    "mealPlanSlots": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::meal-plan-slot.meal-plan-slot"
-    },
     "mainImage": {
       "type": "media",
       "multiple": false,
@@ -80,6 +75,12 @@
       "components": [
         "recipe.single-ingredient"
       ]
+    },
+    "mealPlanSlots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::meal-plan-slot.meal-plan-slot",
+      "mappedBy": "meal"
     }
   }
 }
