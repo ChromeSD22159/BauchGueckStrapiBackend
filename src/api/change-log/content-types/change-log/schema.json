@@ -1,0 +1,28 @@
+{
+  "kind": "singleType",
+  "collectionName": "change_logs",
+  "info": {
+    "singularName": "change-log",
+    "pluralName": "change-logs",
+    "displayName": "changeLog",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "versionNumber": {
+      "type": "string"
+    },
+    "features": {
+      "type": "dynamiczone",
+      "components": [
+        "shared.change-log-item"
+      ]
+    },
+    "releaseDate": {
+      "type": "string"
+    }
+  }
+}

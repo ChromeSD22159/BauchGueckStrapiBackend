@@ -1,112 +1,130 @@
 const {
-  validateUserId, unixToISO,
+  validateUserId, unixToISO, removeTimestamps, removeComponentFieldFromIngredients,
 } = require('../../../utils/validation');
 
 
 
 module.exports = {
-  async getCurrentTimeStamp(ctx) {
+    async getCurrentTimeStamp(ctx) {
+        try {
+            const currentTimestamp = Date.now();
+
+            const hoursOffset = parseInt(ctx.query.hours) || 2;
+
+            const offsetMilliseconds = hoursOffset * 60 * 60 * 1000;
+
+            ctx.body = {
+                previewTimeSamp: currentTimestamp - offsetMilliseconds,
+                currentTimestamp: currentTimestamp,
+                futureTimeStamp: currentTimestamp + offsetMilliseconds,
+                currentTimeString: new Date().toISOString(),
+            };
+        } catch (error) {
+            ctx.status = 500;
+            ctx.body = {
+                "message": "An error occurred while retrieving the timestamp.",
+                "error": error.message
+            };
+        }
+    },
+    async getApiStatistics(ctx) {
       try {
-          const currentTimestamp = Date.now();
+        const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
 
-          const hoursOffset = parseInt(ctx.query.hours) || 2;
+        const totalMeal = await strapi.entityService.count('api::meal.meal');
+        const totalMedication = await strapi.entityService.count('api::medication.medication');
+        const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time');
+        const totalIntakeStatus = await strapi.entityService.count('api::intake-status.intake-status');
 
-          const offsetMilliseconds = hoursOffset * 60 * 60 * 1000;
+        const weightsEntries = await strapi.entityService.count('api::weight.weight');
+        const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake');
 
-          ctx.body = {
-              previewTimeSamp: currentTimestamp - offsetMilliseconds,
-              currentTimestamp: currentTimestamp,
-              futureTimeStamp: currentTimestamp + offsetMilliseconds,
-              currentTimeString: new Date().toISOString(),
-          };
-      } catch (error) {
-          ctx.status = 500;
-          ctx.body = {
-              "message": "An error occurred while retrieving the timestamp.",
-              "error": error.message
-          };
-      }
-  },
-  async getApiStatistics(ctx) {
-    try {
-      const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
-
-      const totalMeal = await strapi.entityService.count('api::meal.meal');
-      const totalMedication = await strapi.entityService.count('api::medication.medication');
-      const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time');
-      const totalIntakeStatus = await strapi.entityService.count('api::intake-status.intake-status');
-
-      const weightsEntries = await strapi.entityService.count('api::weight.weight');
-      const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake');
-
-      let totalEntries = 0;
-      const totalEntriesArray = [
-        countdownTimerTotalEntries,
-        totalMedication,
-        totalIntakeTimes,
-        totalIntakeStatus,
-        weightsEntries,
-        waterIntakesEntries
-      ]
-
-      totalEntriesArray.forEach(count => {
-        totalEntries += count;
-      })
-
-      let avgWeightPerUser = await avgWeightFromUsers()
-      let avgDurationPerUser = await avgDurationsFromUsers()
-      let avgMedicationsData = await avgMedicationsTimerFromUsers(totalMedication)
-      let avgStatusPerUser = avgMedicationsData.avgStatusPerUser
-      let avgTimerPerUser = avgMedicationsData.avgTimerPerUser
-      return {
-
-        medications: {
+        let totalEntries = 0;
+        const totalEntriesArray = [
+          countdownTimerTotalEntries,
           totalMedication,
           totalIntakeTimes,
           totalIntakeStatus,
-        },
-        recipes: {
-          totalMeal
-        },
-        totalEntries,
-        timer: {
-          countdownTimerTotalEntries
-        },
-        userRelated: {
-          avgWeightPerUser,
-          avgDurationPerUser,
-          avgTimerPerUser,
-          avgStatusPerUser
-        },
-        weights: {
-          weightsEntries
-        },
-        waterIntake: {
+          weightsEntries,
           waterIntakesEntries
-        }
-      };
-    } catch (err) {
-      ctx.status = 500;
-      ctx.body = {
-        "message": err.message,
-      }
-    }
-  },
-  async generateID(ctx) {
-    try {
-      const id = generateId();
+        ]
 
-      ctx.body = {
-        generatedId: id
-      };
-    } catch (error) {
-      ctx.status = 500;
-      ctx.body = {
-        "message": "An error occurred while retrieving the timestamp.",
-        "error": error.message
-      };
+        totalEntriesArray.forEach(count => {
+          totalEntries += count;
+        })
+
+        let avgWeightPerUser = await avgWeightFromUsers()
+        let avgDurationPerUser = await avgDurationsFromUsers()
+        let avgMedicationsData = await avgMedicationsTimerFromUsers(totalMedication)
+        let avgStatusPerUser = avgMedicationsData.avgStatusPerUser
+        let avgTimerPerUser = avgMedicationsData.avgTimerPerUser
+        return {
+
+          medications: {
+            totalMedication,
+            totalIntakeTimes,
+            totalIntakeStatus,
+          },
+          recipes: {
+            totalMeal
+          },
+          totalEntries,
+          timer: {
+            countdownTimerTotalEntries
+          },
+          userRelated: {
+            avgWeightPerUser,
+            avgDurationPerUser,
+            avgTimerPerUser,
+            avgStatusPerUser
+          },
+          weights: {
+            weightsEntries
+          },
+          waterIntake: {
+            waterIntakesEntries
+          }
+        };
+      } catch (err) {
+        ctx.status = 500;
+        ctx.body = {
+          "message": err.message,
+        }
+      }
+    },
+    async generateID(ctx) {
+      try {
+        const id = generateId();
+
+        ctx.body = {
+          generatedId: id
+        };
+      } catch (error) {
+        ctx.status = 500;
+        ctx.body = {
+          "message": "An error occurred while retrieving the timestamp.",
+          "error": error.message
+        };
+      }
+    },
+    async changeLog(ctx) {
+        let changeLogModel = "api::change-log.change-log"
+        let result = await strapi.entityService.findMany(changeLogModel, {
+            populate: {
+                features: true
+            },
+        });
+
+        if (result.features && Array.isArray(result.features)) {
+            result.features = result.features.map(feature => {
+                delete feature.id
+                const { __component, ...rest } = feature;
+                return rest;
+            });
+        }
+
+        ctx.body = removeTimestamps(result);
     }
-  },
 }
 
 function generateId() {

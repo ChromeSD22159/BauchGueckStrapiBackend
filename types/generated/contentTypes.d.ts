@@ -788,6 +788,39 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiChangeLogChangeLog extends Schema.SingleType {
+  collectionName: 'change_logs';
+  info: {
+    singularName: 'change-log';
+    pluralName: 'change-logs';
+    displayName: 'changeLog';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    versionNumber: Attribute.String;
+    features: Attribute.DynamicZone<['shared.change-log-item']>;
+    releaseDate: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::change-log.change-log',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::change-log.change-log',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
   collectionName: 'countdown_timers';
   info: {
@@ -1312,6 +1345,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::change-log.change-log': ApiChangeLogChangeLog;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
       'api::intake-status.intake-status': ApiIntakeStatusIntakeStatus;
       'api::intake-time.intake-time': ApiIntakeTimeIntakeTime;

@@ -25,6 +25,8 @@ module.exports = {
 
         GET(publicController, "", "generateID"),
 
+        GET(publicController, "", "changeLog"),
+
         // Endpoint: https://{{base_url}}/api/medication/syncDeviceMedicationData
         // Description: Syncs medication data from the device to the server.
         // Required:

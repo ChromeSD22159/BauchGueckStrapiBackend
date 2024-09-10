@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_shared_change_log_items",
+  "info": {
+    "displayName": "ChangeLogItem"
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string"
+    }
+  }
+}

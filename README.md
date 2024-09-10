@@ -44,6 +44,9 @@ yarn build
 `GET /api/generateID`
 - Generate uniqueIDs
 
+`GET /api/changeLog`
+- Get the ChangeLog from the App
+
 ### Medication Endpoints
 `POST /api/medication/syncDeviceMedicationData`
 - Syncs medication data from the device to the server.
@@ -83,6 +86,13 @@ yarn build
 `GET /api/mealPlan/getUpdatedMealPlanDayEntries`
 - Retrieves updated meal plan day entries for a specific user based on a provided timestamp.
 
+### ShoppingList Endpoints
+`POST /api/shoppingList/syncDeviceShoppingListData`
+- Syncs ShoppingList data from the device to the server.
+
+
+`GET /api/shoppingList/getUpdatedMealPlanDayEntries`
+- Retrieves updated getUpdatedShoppingListEntries entries for a specific user based on a provided timestamp.
 
 
 

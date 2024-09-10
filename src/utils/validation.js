@@ -23,16 +23,17 @@ function userIdToString(str) {
 
 function removeTimestamps(obj) {
   if (Array.isArray(obj)) {
-    obj.forEach(removeTimestamps);
+      obj.forEach(removeTimestamps);
   } else if (typeof obj === 'object' && obj !== null) {
-    delete obj['createdAt'];
-    delete obj['updatedAt'];
+      delete obj['createdAt'];
+      delete obj['updatedAt'];
+      delete obj['publishedAt'];
 
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        removeTimestamps(obj[key]);
+      for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+              removeTimestamps(obj[key]);
+          }
       }
-    }
   }
   return obj;
 }
