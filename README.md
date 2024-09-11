@@ -34,6 +34,10 @@ yarn build
 
 
 ## API Routes
+
+ Production Server Host:
+### https://bauchglueck.appsbyfrederikkohler.de/admin/
+
 ### General Endpoints
 `GET /api/getCurrentTimeStamp`
 - Retrieves the current, previous, and future timestamps for synchronization purposes.
@@ -136,7 +140,9 @@ This Postman Collection contains API requests for interacting with the BauchGlü
 
 
 ```
-/var/www/vhosts/appsbyfrederikkohler.de/api.appsbyfrederikkohler.de/bauchglueck# npm run strapi start
+/var/www/vhosts/appsbyfrederikkohler.de/api.appsbyfrederikkohler.de/bauchglueck
+
+# npm run strapi start
 ```
 
 ```
