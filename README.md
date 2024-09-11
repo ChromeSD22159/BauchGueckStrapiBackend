@@ -132,3 +132,13 @@ This Postman Collection contains API requests for interacting with the BauchGlü
 ## Recipes
 [Recipes for gastric bypass operated people.](https://www.lecker-ohne.de/)
 
+
+
+
+```
+/var/www/vhosts/appsbyfrederikkohler.de/api.appsbyfrederikkohler.de/bauchglueck# npm run strapi start
+```
+
+```
+sudo kill <Process PID>
+```
