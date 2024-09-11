@@ -1,4 +1,5 @@
-module.exports = {
+
+module.exports = ({ env }) => ({
   upload: {
     config: {
       sizeLimit: 2 * 1024 * 1024, // 2mb in bytes
@@ -9,5 +10,11 @@ module.exports = {
         xsmall: 64
       },
     }
-  }
-}
+  },
+  io: {
+    enabled: true,
+    config: {
+        contentTypes: ['api::intake-time.intake-time'],
+    },
+  },
+});
