@@ -1,3 +1,5 @@
+
+/*
 const config = {
   locales: [
     'de',
@@ -37,3 +39,4 @@ export default {
   config,
   bootstrap,
 };
+ */
