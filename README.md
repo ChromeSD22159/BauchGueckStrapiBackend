@@ -34,6 +34,9 @@
 - Required to user /api/upload/ before an need the imageId for generating an Recipe!!!
 - Creates a new recipe and stores it in the database. And Generate Nutrition by Google Gemini!!!
 
+`Post /api/recipes/generateRecipe`
+- Required!  Bearer Token in the Authorization header.
+
 `POST /api/overview`
 - Default is 0, 
 - parameter: /api/overview?count=0

@@ -5,7 +5,7 @@ const {
 } = require("../../../utils/validation");
 
 const {
-  calculateNutritionForRecipe
+  calculateNutritionForRecipe, generateRecipe
 } = require("../../../utils/GoogleAI");
 
 const mealModel = "api::meal.meal"
@@ -177,4 +177,7 @@ module.exports = {
 
       handleEmptyResponseBody(ctx, 'No Meals found after the specified timestamp')
   },
+  async generateRecipe(ctx) {
+    ctx.body = await generateRecipe()
+  }
 }
