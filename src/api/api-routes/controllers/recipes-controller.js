@@ -178,6 +178,6 @@ module.exports = {
       handleEmptyResponseBody(ctx, 'No Meals found after the specified timestamp')
   },
   async generateRecipe(ctx) {
-    ctx.body = await generateRecipe()
+      ctx.body = await generateRecipe(ctx.query.category)
   }
 }

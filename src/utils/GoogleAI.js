@@ -47,12 +47,17 @@ async function calculateNutritionForRecipe(recipe) {
     }
 }
 
-async function generateRecipe() {
+async function generateRecipe(category) {
+    const cat = category ? category : "Hauptgericht";
+
     const prompt = `
       Du bist ein Ernährungsberater, der sich auf Patienten mit Magenbypass, Magenband und Schlauchmagen spezialisiert hat.
-      Erstelle eine Rezeptvorlage, die fettarme und eiweißreiche Lebensmittel bevorzugt, während zuckerhaltige Lebensmittel minimiert werden.
-      Jede Mahlzeit sollte etwa 100 g betragen. Berechne gesamt die Nährwerte für die Mahlzeit, einschließlich Kalorien, Proteine, Fett und Kohlenhydrate.
-    `;
+      Erstelle ein Rezept, das in die Kategorie ${cat} fällt und fettarme sowie eiweißreiche Lebensmittel bevorzugt, während zuckerhaltige Lebensmittel minimiert werden.
+      Die Portion sollte pro Mahlzeit etwa 100 g betragen. Berechne die gesamten Nährwerte für die Mahlzeit, einschließlich Kalorien, Proteine, Fett und Kohlenhydrate.
+      Achte darauf, dass die Mahlzeit leicht verdaulich und für Patienten nach bariatrischen Eingriffen geeignet ist.
+  `;
+
+    console.log(cat)
 
     const responseSchema = {
       type: SchemaType.OBJECT,
@@ -93,8 +98,6 @@ async function generateRecipe() {
     try {
         let result = await model.generateContent(prompt);
 
-        console.log(result)
-
         return result.response.text()
     } catch (error) {
         console.error("Fehler bei der Rezept erstellung:", error);
@@ -103,6 +106,7 @@ async function generateRecipe() {
 }
 
 module.exports = {
-  calculateNutritionForRecipe,
-  generateRecipe
+    calculateNutritionForRecipe,
+    generateRecipe
 };
+
