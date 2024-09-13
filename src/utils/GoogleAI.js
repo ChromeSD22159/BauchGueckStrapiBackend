@@ -57,8 +57,6 @@ async function generateRecipe(category) {
       Achte darauf, dass die Mahlzeit leicht verdaulich und für Patienten nach bariatrischen Eingriffen geeignet ist.
   `;
 
-    console.log(cat)
-
     const responseSchema = {
       type: SchemaType.OBJECT,
       properties: {
