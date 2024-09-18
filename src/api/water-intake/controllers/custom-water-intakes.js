@@ -119,7 +119,7 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
       const deletedWaterIntakes = [];
 
       for (const waterIntake of waterIntakes) {
-        const { waterIntakeId, userId, updatedAtOnDevice, isDeleted } = waterIntake;
+        const { waterIntakeId, userId, updatedAtOnDevice, isDeleted, value } = waterIntake;
 
         if (isDeleted) {
           deletedWaterIntakes.push({ waterIntakeId, userId });
@@ -129,17 +129,17 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
           });
         } else {
           const existingEntry = await strapi.db.query('api::water-intake.water-intake').findOne({
-            where: { waterIntakeId, userId }
+              where: { waterIntakeId, userId }
           });
 
           if (existingEntry) {
             await strapi.db.query('api::water-intake.water-intake').update({
-              where: { id: existingEntry.id },
-              data: { updatedAtOnDevice }
+                where: { id: existingEntry.id },
+                data: { updatedAtOnDevice, value }
             });
           } else {
             await strapi.db.query('api::water-intake.water-intake').create({
-              data: { waterIntakeId, userId, updatedAtOnDevice, isDeleted }
+                data: { waterIntakeId, userId, updatedAtOnDevice, isDeleted }
             });
           }
         }

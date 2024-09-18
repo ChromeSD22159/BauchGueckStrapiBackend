@@ -14,12 +14,14 @@
   "attributes": {
     "userId": {
       "type": "string"
-    }, 
+    },
     "waterIntakeId": {
-      "type": "string"
+      "type": "string",
+      "default": "0"
     },
     "value": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "default": "0"
     },
     "isDeleted": {
       "type": "boolean",

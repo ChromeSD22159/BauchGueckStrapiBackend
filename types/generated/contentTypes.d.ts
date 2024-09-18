@@ -1265,8 +1265,8 @@ export interface ApiWaterIntakeWaterIntake extends Schema.CollectionType {
   };
   attributes: {
     userId: Attribute.String;
-    waterIntakeId: Attribute.String;
-    value: Attribute.BigInteger;
+    waterIntakeId: Attribute.String & Attribute.DefaultTo<'0'>;
+    value: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     isDeleted: Attribute.Boolean &
       Attribute.Required &
       Attribute.DefaultTo<false>;
