@@ -131,15 +131,15 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
           const existingEntry = await strapi.db.query('api::water-intake.water-intake').findOne({
               where: { waterIntakeId, userId }
           });
-
+          const floatValue = parseFloat(value);
           if (existingEntry) {
             await strapi.db.query('api::water-intake.water-intake').update({
                 where: { id: existingEntry.id },
-                data: { updatedAtOnDevice, value }
+                data: { updatedAtOnDevice, floatValue }
             });
           } else {
             await strapi.db.query('api::water-intake.water-intake').create({
-                data: { waterIntakeId, userId, updatedAtOnDevice, isDeleted }
+                data: { waterIntakeId, userId, updatedAtOnDevice, isDeleted, floatValue }
             });
           }
         }
