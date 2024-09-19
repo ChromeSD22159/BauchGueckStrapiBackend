@@ -3,6 +3,9 @@ const {
   userIdToString, validateUserId, validateTimerStamp
 } = require('../../../utils/validation');
 
+const admin = require('../../../../config/firebase');
+const schedule = require('node-schedule');
+
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
@@ -32,6 +35,7 @@ module.exports = createCoreController('api::countdown-timer.countdown-timer', ({
             } else {
                 // when Exists Update it else Insert it
                 if (existingEntry) {
+
                     await strapi.db.query('api::countdown-timer.countdown-timer').update({
                         where: { id: existingEntry.id },
                         data: {
