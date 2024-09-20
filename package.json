@@ -22,6 +22,7 @@
     "firebase": "^10.13.2",
     "firebase-admin": "^12.5.0",
     "mysql": "^2.18.1",
+    "node-cron": "^3.0.3",
     "node-schedule": "^2.1.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
