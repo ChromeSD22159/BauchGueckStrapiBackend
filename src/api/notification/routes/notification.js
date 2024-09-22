@@ -30,5 +30,11 @@ module.exports = {
             handler: 'notification.deleteCronJob',
             config: { policies: [] },
         },
+        {
+            method: 'POST',
+            path: '/send-notification-all-user',
+            config: { policies: [] },
+            handler: 'notification.notificationToAllUsers',
+        }
     ],
 };

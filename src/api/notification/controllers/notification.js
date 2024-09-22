@@ -240,7 +240,59 @@ module.exports = {
             strapi.log.error('Fehler beim Löschen des CronJobs:', error.message || error);
             return ctx.internalServerError('Fehler beim Löschen des CronJobs. Details: ' + (error.message || error));
         }
+    },
+
+    async notificationToAllUsers(ctx) {
+        const { title, body, data } = ctx.request.body;
+
+        if (!title || !body) {
+            return ctx.badRequest('Titel und Body sind erforderlich.');
+        }
+
+        try {
+          // Alle Device-Tokens abrufen
+          const allUserTokens = await strapi.db.query("api::device-token.device-token").findMany({});
+
+          // Array für Erfolgs- und Fehlerantworten
+          const successResponses = [];
+          const errorResponses = [];
+
+          // Über alle Tokens iterieren
+          for (const userToken of allUserTokens) {
+              const message = {
+                  notification: {
+                      title: title,
+                      body: body,
+                  },
+                  token: userToken.token, // FCM Device Token
+                  data: data || {}, // Optional zusätzliche Daten
+              };
+
+              try {
+                  const response = await admin.messaging().send(message);
+                  successResponses.push({
+                      token: userToken.token,
+                      response: response,
+                  });
+              } catch (error) {
+                  errorResponses.push({
+                      token: userToken.token,
+                      error: error,
+                  });
+              }
+          }
+
+          // Rückgabe aller Erfolgs- und Fehlermeldungen
+          return ctx.send({
+              message: 'Benachrichtigungen verarbeitet.',
+              success: successResponses,
+              errors: errorResponses,
+          });
+        } catch (error) {
+            return ctx.badRequest('Fehler beim Abrufen der Device-Tokens', { error });
+        }
     }
+
 };
 
 function generateCronExpression({ minutes = [], hours = [], daysOfMonth = [], months = [], daysOfWeek = [] }) {
