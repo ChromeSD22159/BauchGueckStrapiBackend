@@ -1,3 +1,4 @@
+
 module.exports = ({ env }) => ({
     host: env('HOST', '0.0.0.0'),
     port: env.int('PORT', 80),
@@ -6,6 +7,12 @@ module.exports = ({ env }) => ({
     },
     webhooks: {
       populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
+    },
+    cron: {
+      enabled: true,
+      tasks: {
+        ...require('../src/services/medication-reminder')
+      }
     },
     custom: {
       socket: true,

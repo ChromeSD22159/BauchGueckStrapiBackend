@@ -4,9 +4,13 @@ const medicationController = "medication-controller."
 const recipesController = "recipes-controller."
 const mealPlanController = "meal-plan-controller."
 const shoppingListController = "shopping-list-controller."
+const tokenController = "token-controller."
 
 module.exports = {
     routes: [
+        POST(tokenController, "", "deleteDeviceToken"),
+        POST(tokenController, "", "saveDeviceToken"),
+
         // Endpoint: https://{{base_url}}/api/getCurrentTimeStamp
         // Description: Retrieves the current, previous, and future timestamps for synchronization purposes.
         // Required:

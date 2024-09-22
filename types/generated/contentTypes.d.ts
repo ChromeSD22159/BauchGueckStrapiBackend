@@ -797,7 +797,7 @@ export interface ApiChangeLogChangeLog extends Schema.SingleType {
     description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     versionNumber: Attribute.String;
@@ -805,7 +805,6 @@ export interface ApiChangeLogChangeLog extends Schema.SingleType {
     releaseDate: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::change-log.change-log',
       'oneToOne',
@@ -862,6 +861,37 @@ export interface ApiCountdownTimerCountdownTimer extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::countdown-timer.countdown-timer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDeviceTokenDeviceToken extends Schema.CollectionType {
+  collectionName: 'device_tokens';
+  info: {
+    singularName: 'device-token';
+    pluralName: 'device-tokens';
+    displayName: 'UserDeviceToken';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    token: Attribute.String;
+    userID: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::device-token.device-token',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::device-token.device-token',
       'oneToOne',
       'admin::user'
     > &
@@ -1347,6 +1377,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::change-log.change-log': ApiChangeLogChangeLog;
       'api::countdown-timer.countdown-timer': ApiCountdownTimerCountdownTimer;
+      'api::device-token.device-token': ApiDeviceTokenDeviceToken;
       'api::intake-status.intake-status': ApiIntakeStatusIntakeStatus;
       'api::intake-time.intake-time': ApiIntakeTimeIntakeTime;
       'api::meal.meal': ApiMealMeal;
