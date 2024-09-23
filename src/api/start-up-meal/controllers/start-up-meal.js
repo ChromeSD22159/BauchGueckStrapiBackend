@@ -32,7 +32,9 @@ module.exports = createCoreController(model, ({ strapi }) => ({
                   }
               });
 
-              meals.push(mealById);
+              if(mealById !== null) {
+                  meals.push(mealById);
+              }
           }
 
           ctx.body = meals;

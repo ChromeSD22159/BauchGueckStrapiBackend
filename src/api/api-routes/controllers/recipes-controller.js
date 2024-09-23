@@ -17,7 +17,7 @@ module.exports = {
     if (handleEmptyUserParameter(ctx)) return;
 
     // Überprüfen, ob die Suchabfrage mindestens 3 Zeichen enthält
-    if (handleSearchQueryMustContain3Chars(ctx, "No recipe found. You sent less than 3 characters.")) return;
+    //if (handleSearchQueryMustContain3Chars(ctx, "No recipe found. You sent less than 3 characters.")) return;
 
     const userId = ctx.query.userId;
     const searchQuery = ctx.query.searchQuery;
@@ -56,57 +56,58 @@ module.exports = {
     ctx.body = removeTimestamps(result);
   },
   async createRecipe(ctx) {
-    let createdCategoryId = 0;
+      let createdCategoryId = 0;
 
-    const existingCategory = await strapi.db.query(recipeCategory).findOne({
-      where: {
-        name: ctx.request.body.category.name,
-      },
-    });
-
-    if(existingCategory) {
-      createdCategoryId = existingCategory.id;
-    } else {
-      const newCategory = await strapi.db.query(recipeCategory).create({
-        data: {
-          name: ctx.request.body.category.name,
-          ...ctx.request.body.category,
-        },
-      });
-      createdCategoryId = newCategory.id;
-    }
-
-    const existingRecipe = await strapi.db.query(mealModel).findOne({
-      where: {
-        name: ctx.request.body.name,
-      },
-    });
-    if(existingRecipe) {
-      ctx.status = 409;
-      ctx.body = {
-        "status": ctx.status,
-        "message": "Rezept mit den Namen existiert bereits!",
-      };
-    } else {
-      const recipe = { ...ctx.request.body };
-      delete recipe.id;
-      delete recipe.category;
-      recipe.category = createdCategoryId;
-
-      let nutrition = await calculateNutritionForRecipe(recipe);
-
-      recipe.protein = nutrition.protein;
-      recipe.fat = nutrition.fat
-      recipe.sugar = nutrition.carbohydrates
-      recipe.kcal = nutrition.calories
-
-      ctx.body = await strapi.db.query(mealModel).create({
-          data: recipe,
-          populate: {
-            category: true,
+      const existingCategory = await strapi.db.query(recipeCategory).findOne({
+          where: {
+              name: ctx.request.body.category.name,
           },
       });
-    }
+
+      if(existingCategory) {
+          createdCategoryId = existingCategory.id;
+      } else {
+          const newCategory = await strapi.db.query(recipeCategory).create({
+              data: {
+                  name: ctx.request.body.category.name,
+                  ...ctx.request.body.category,
+              },
+          });
+          createdCategoryId = newCategory.id;
+      }
+
+      const existingRecipe = await strapi.db.query(mealModel).findOne({
+          where: {
+              name: ctx.request.body.name,
+          },
+      });
+
+      if(existingRecipe) {
+          ctx.status = 409;
+          ctx.body = {
+            "status": ctx.status,
+            "message": "Rezept mit den Namen existiert bereits!",
+          };
+      } else {
+          const recipe = { ...ctx.request.body };
+          delete recipe.id;
+          delete recipe.category;
+          recipe.category = createdCategoryId;
+
+          let nutrition = await calculateNutritionForRecipe(recipe);
+
+          recipe.protein = nutrition.protein;
+          recipe.fat = nutrition.fat
+          recipe.sugar = nutrition.carbohydrates
+          recipe.kcal = nutrition.calories
+
+          ctx.body = await strapi.db.query(mealModel).create({
+              data: recipe,
+              populate: {
+                category: true,
+              },
+          });
+      }
   },
   async overview(ctx) {
     try {
@@ -178,6 +179,6 @@ module.exports = {
       handleEmptyResponseBody(ctx, 'No Meals found after the specified timestamp')
   },
   async generateRecipe(ctx) {
-      ctx.body = await generateRecipe(ctx.query.category)
+      ctx.body = await generateRecipe(ctx.query.category, ctx.query.withNutrition)
   }
 }
