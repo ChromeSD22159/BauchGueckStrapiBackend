@@ -57,10 +57,29 @@ module.exports = {
   },
   async createRecipe(ctx) {
       let createdCategoryId = 0;
+      delete ctx.request.body.id
+
+      const transformedRecipe = {
+          ...ctx.request.body,
+          ingredients: ctx.request.body.ingredients.map(item => (
+            {
+              "__component": "recipe.single-ingredient",
+              id: String(item.id),
+              name: item.name,
+              unit: item.unit,
+              amount: item.amount
+            }
+          ))
+      };
+
+      transformedRecipe.protein = 0.0;
+      transformedRecipe.fat = 0.0;
+      transformedRecipe.sugar = 0.0;
+      transformedRecipe.kcal = 0.0;
 
       const existingCategory = await strapi.db.query(recipeCategory).findOne({
           where: {
-              name: ctx.request.body.category.name,
+              name: transformedRecipe.category.name,
           },
       });
 
@@ -69,8 +88,8 @@ module.exports = {
       } else {
           const newCategory = await strapi.db.query(recipeCategory).create({
               data: {
-                  name: ctx.request.body.category.name,
-                  ...ctx.request.body.category,
+                  name: transformedRecipe.category.name,
+                  ...transformedRecipe.category,
               },
           });
           createdCategoryId = newCategory.id;
@@ -78,7 +97,7 @@ module.exports = {
 
       const existingRecipe = await strapi.db.query(mealModel).findOne({
           where: {
-              name: ctx.request.body.name,
+              name: transformedRecipe.name,
           },
       });
 
@@ -89,24 +108,34 @@ module.exports = {
             "message": "Rezept mit den Namen existiert bereits!",
           };
       } else {
-          const recipe = { ...ctx.request.body };
+          const recipe = { ...transformedRecipe };
           delete recipe.id;
-          delete recipe.category;
-          recipe.category = createdCategoryId;
+          recipe.category.id = createdCategoryId;
 
           let nutrition = await calculateNutritionForRecipe(recipe);
 
-          recipe.protein = nutrition.protein;
-          recipe.fat = nutrition.fat
-          recipe.sugar = nutrition.carbohydrates
-          recipe.kcal = nutrition.calories
+          transformedRecipe.protein = nutrition.protein;
+          transformedRecipe.fat = nutrition.fat
+          transformedRecipe.sugar = nutrition.carbohydrates
+          transformedRecipe.kcal = nutrition.calories
 
-          ctx.body = await strapi.db.query(mealModel).create({
-              data: recipe,
-              populate: {
-                category: true,
-              },
-          });
+          try {
+              const created = await strapi.entityService.create(mealModel, {
+                  data: transformedRecipe,
+                  populate: {
+                    ingredients: true,
+                    mainImage: true,
+                    category: true
+                  },
+              });
+
+              ctx.status = 201;
+              ctx.body = created;
+          } catch (error) {
+              console.error('Fehler beim Erstellen des Rezepts:', error);
+              ctx.status = 500;
+              ctx.body = { message: 'Ein interner Fehler ist aufgetreten.' };
+          }
       }
   },
   async overview(ctx) {
