@@ -1,15 +1,5 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
-export interface SharedChangeLogItem extends Schema.Component {
-  collectionName: 'components_shared_change_log_items';
-  info: {
-    displayName: 'ChangeLogItem';
-  };
-  attributes: {
-    value: Attribute.String;
-  };
-}
-
 export interface RecipeSingleIngredient extends Schema.Component {
   collectionName: 'components_recipe_single_ingredients';
   info: {
@@ -24,11 +14,21 @@ export interface RecipeSingleIngredient extends Schema.Component {
   };
 }
 
+export interface SharedChangeLogItem extends Schema.Component {
+  collectionName: 'components_shared_change_log_items';
+  info: {
+    displayName: 'ChangeLogItem';
+  };
+  attributes: {
+    value: Attribute.String;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
-      'shared.change-log-item': SharedChangeLogItem;
       'recipe.single-ingredient': RecipeSingleIngredient;
+      'shared.change-log-item': SharedChangeLogItem;
     }
   }
 }
