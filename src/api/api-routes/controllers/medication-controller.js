@@ -6,6 +6,14 @@ const {
   handleEmptyResponseBody
 } = require("../../../utils/validation");
 
+const {
+  createFirebaseJob,
+  updateFirebaseJob,
+  deleteFirebaseJob,
+  handleRecurringNotifications,
+  checkFirebaseJob
+} = require('../../../utils/firebaseJobs');
+
 module.exports = {
     async getUpdatedMedicationEntries(ctx) {
         if (handleEmptyUserParameter(ctx)) return;
@@ -91,13 +99,13 @@ module.exports = {
 
           // 3. wenn Medikament ist vorhanden update anhand der id, wenn nicht entferne id und update
           if (intakeTimeIdToUse) {
-            // Medikament existiert, also aktualisieren
-            intakeTime.id = intakeTimeIdToUse.id;
+              // Medikament existiert, also aktualisieren
+              intakeTime.id = intakeTimeIdToUse.id;
 
-            await strapi.db.query('api::intake-time.intake-time').update({
-              where: { id: intakeTimeOrNull.id },
-              data: { ...intakeTime, id: intakeTimeOrNull.id },
-            });
+              await strapi.db.query('api::intake-time.intake-time').update({
+                  where: { id: intakeTimeOrNull.id },
+                  data: { ...intakeTime, id: intakeTimeOrNull.id },
+              });
           } else {
             // Medikament existiert nicht, also erstellen
             const newIntakeTime = await strapi.entityService.create('api::intake-time.intake-time', {
@@ -106,34 +114,65 @@ module.exports = {
             intakeTimeIdToUse = newIntakeTime.id;
           }
 
-          for (const intakeTimeStatusData of intakeStatuses) {
+            for (const intakeTimeStatusData of intakeStatuses) {
 
-            let intakeStatusOrNull = await strapi.db.query('api::intake-status.intake-status').findOne({
-              where: {
-                intakeStatusId: intakeTimeStatusData.intakeStatusId
-              },
-            });
+                let intakeStatusOrNull = await strapi.db.query('api::intake-status.intake-status').findOne({
+                  where: {
+                    intakeStatusId: intakeTimeStatusData.intakeStatusId
+                  },
+                });
 
-            let intakeStatusIdToUse = intakeStatusOrNull ? intakeStatusOrNull.id : null;
+                let intakeStatusIdToUse = intakeStatusOrNull ? intakeStatusOrNull.id : null;
 
-            if (intakeStatusIdToUse) {
+                if (intakeStatusIdToUse) {
+                    if(intakeTimeStatusData.isTaken === undefined) {
+                        intakeTimeStatusData.isTaken = false
+                    }
 
-              if(intakeTimeStatusData.isTaken === undefined) {
-                intakeTimeStatusData.isTaken = false
-              }
-
-              await strapi.db.query('api::intake-status.intake-status').update({
-                where: { id: intakeStatusOrNull.id },
-                data: { ...intakeTimeStatusData, id: intakeStatusOrNull.id },
-              });
-            } else {
-              const newIntakeStatus = await strapi.entityService.create('api::intake-status.intake-status', {
-                data: { ...intakeTimeStatusData, intake_time: intakeTimeIdToUse },
-              });
-              intakeStatusIdToUse = newIntakeStatus.id;
+                    await strapi.db.query('api::intake-status.intake-status').update({
+                        where: { id: intakeStatusOrNull.id },
+                        data: { ...intakeTimeStatusData, id: intakeStatusOrNull.id },
+                    });
+                } else {
+                    const newIntakeStatus = await strapi.entityService.create('api::intake-status.intake-status', {
+                       data: { ...intakeTimeStatusData, intake_time: intakeTimeIdToUse },
+                    });
+                    intakeStatusIdToUse = newIntakeStatus.id;
+                }
             }
-          }
         }
+
+        /*
+             // 5. Handle recurring notifications based on medication and intake time
+        const tokens = await strapi.db.query("api::device-token.device-token").findMany({
+            where: {
+              userID: medication.userId
+            }
+        });
+
+        console.log(tokens)
+
+        const tokenList = tokens.map(token => token.deviceToken);
+
+        // Check and update notifications based on the `notify` flag and intake time
+        for (const intakeTime of intakeTimesWithStatus.map(i => i.intakeTime)) {
+            const existingJob = await checkFirebaseJob(intakeTime.intakeTimeId); // Check for existing job (implement this function)
+
+            if (medication.notify) {
+                // If notify is true, either create or update the job
+                if (existingJob) {
+                    await updateFirebaseJob(intakeTime.intakeTimeId, intakeTime.time, tokenList);
+                } else {
+                    await createFirebaseJob(intakeTime.intakeTimeId, intakeTime.time, tokenList);
+                }
+            } else {
+                // If notify is false, delete the existing job
+                if (existingJob) {
+                    await deleteFirebaseJob(intakeTime.intakeTimeId);
+                }
+            }
+        }
+         */
 
       }
 

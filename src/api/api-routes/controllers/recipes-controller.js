@@ -182,6 +182,29 @@ module.exports = {
     }
   },
 
+  // NEW ROUTES
+  async getUpdatedRecipesEntries(ctx) {
+      const timeStamp = validateTimerStamp(ctx)
+
+      let result = await strapi.entityService.findMany(mealModel, {
+          filters: {
+            updatedAtOnDevice: { $gt: timeStamp },
+          },
+          populate: {
+              ingredients: {  // Die Dynamic Zone "ingredients" wird beachtet
+                  populate: ['name', 'amount', 'unit'],
+              },
+              mainImage: true,
+              category: true
+          }
+      });
+
+      ctx.body = removeTimestamps(result);
+
+      handleEmptyResponseBody(ctx, 'No Recipes found after the specified timestamp')
+  },
+  // NEW ROUTES
+
   async getUpdatedMealEntries(ctx) {
       if (handleEmptyUserParameter(ctx)) return;
 

@@ -14,7 +14,7 @@ module.exports = ({ env }) => ({
   io: {
     enabled: true,
     config: {
-        contentTypes: ['api::intake-time.intake-time'],
+        contentTypes: ['api::online-user.online-user'],
     },
   },
 });

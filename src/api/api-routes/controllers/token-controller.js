@@ -4,7 +4,7 @@ const model = "api::device-token.device-token";
 module.exports = {
     async deleteDeviceToken(ctx) {
       const { userID, token } = ctx.request.body;
-
+      console.log(token)
       if (!userID || !token) {
           return ctx.badRequest('userID und token sind erforderlich.');
       }
@@ -40,7 +40,7 @@ module.exports = {
     },
     async saveDeviceToken(ctx) {
       const { userID, token } = ctx.request.body;
-
+      console.log(token)
       if (!userID || !token) {
         return ctx.badRequest('userID und token sind erforderlich.');
       }
