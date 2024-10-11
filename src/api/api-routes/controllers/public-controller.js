@@ -28,76 +28,77 @@ module.exports = {
         }
     },
     async appStatistics(ctx) {
-      try {
-        const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer');
-        const totalMealPlans = await strapi.entityService.count('api::meal-plan-day.meal-plan-day');
-        const totalMealPlansSpots = await strapi.entityService.count('api::meal-plan-slot.meal-plan-slot');
-        const totalMeal = await strapi.entityService.count('api::meal.meal');
-        const totalMedication = await strapi.entityService.count('api::medication.medication');
-        const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time');
-        const totalIntakeStatus = await strapi.entityService.count('api::intake-status.intake-status');
+    try {
+      const countdownTimerTotalEntries = await strapi.entityService.count('api::countdown-timer.countdown-timer') || 0;
+      const totalMealPlans = await strapi.entityService.count('api::meal-plan-day.meal-plan-day') || 0;
+      const totalMealPlansSpots = await strapi.entityService.count('api::meal-plan-slot.meal-plan-slot') || 0;
+      const totalMeal = await strapi.entityService.count('api::meal.meal') || 0;
+      const totalMedication = await strapi.entityService.count('api::medication.medication') || 0;
+      const totalIntakeTimes = await strapi.entityService.count('api::intake-time.intake-time') || 0;
+      const totalIntakeStatus = await strapi.entityService.count('api::intake-status.intake-status') || 0;
 
-        const weightsEntries = await strapi.entityService.count('api::weight.weight');
-        const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake');
+      const weightsEntries = await strapi.entityService.count('api::weight.weight') || 0;
+      const waterIntakesEntries = await strapi.entityService.count('api::water-intake.water-intake') || 0;
 
-        let totalEntries = 0;
-        const totalEntriesArray = [
-          countdownTimerTotalEntries,
-          totalMedication,
-          totalIntakeTimes,
-          totalIntakeStatus,
-          weightsEntries,
-          waterIntakesEntries,
-          totalMealPlansSpots,
-          totalMealPlans
-        ]
+      let totalEntries = 0;
+      const totalEntriesArray = [
+        countdownTimerTotalEntries,
+        totalMedication,
+        totalIntakeTimes,
+        totalIntakeStatus,
+        weightsEntries,
+        waterIntakesEntries,
+        totalMealPlansSpots,
+        totalMealPlans
+      ];
 
-        totalEntriesArray.forEach(count => {
-          totalEntries += count;
-        })
+      totalEntriesArray.forEach(count => {
+        totalEntries += count || 0;
+      });
 
-        let avgWeightPerUser = await avgWeightFromUsers()
-        let avgDurationPerUser = await avgDurationsFromUsers()
-        let avgMedicationsData = await avgMedicationsTimerFromUsers(totalMedication)
-        let avgStatusPerUser = avgMedicationsData.avgStatusPerUser
-        let avgTimerPerUser = avgMedicationsData.avgTimerPerUser
-        return {
-          mealPlan: {
-            totalMealPlansSpots,
-            totalMealPlans
-          },
-          medications: {
-            totalMedication,
-            totalIntakeTimes,
-            totalIntakeStatus,
-          },
-          recipes: {
-            totalMeal
-          },
-          totalEntries,
-          timer: {
-            countdownTimerTotalEntries
-          },
-          userRelated: {
-            avgWeightPerUser,
-            avgDurationPerUser,
-            avgTimerPerUser,
-            avgStatusPerUser
-          },
-          weights: {
-            weightsEntries
-          },
-          waterIntake: {
-            waterIntakesEntries
-          }
-        };
-      } catch (err) {
-        ctx.status = 500;
-        ctx.body = {
-          "message": err.message,
+      let avgWeightPerUser = (await avgWeightFromUsers()) || 0.0;
+      let avgDurationPerUser = (await avgDurationsFromUsers()) || 0.0;
+      let avgMedicationsData = await avgMedicationsTimerFromUsers(totalMedication);
+      let avgStatusPerUser = avgMedicationsData.avgStatusPerUser || 0.0;
+      let avgTimerPerUser = avgMedicationsData.avgTimerPerUser || 0.0;
+
+      return {
+        mealPlan: {
+          totalMealPlansSpots: totalMealPlansSpots || 0,
+          totalMealPlans: totalMealPlans || 0
+        },
+        medications: {
+          totalMedication: totalMedication || 0,
+          totalIntakeTimes: totalIntakeTimes || 0,
+          totalIntakeStatus: totalIntakeStatus || 0
+        },
+        recipes: {
+          totalMeal: totalMeal || 0
+        },
+        totalEntries,
+        timer: {
+          countdownTimerTotalEntries: countdownTimerTotalEntries || 0
+        },
+        userRelated: {
+          avgWeightPerUser,
+          avgDurationPerUser,
+          avgTimerPerUser,
+          avgStatusPerUser
+        },
+        weights: {
+          weightsEntries: weightsEntries || 0
+        },
+        waterIntake: {
+          waterIntakesEntries: waterIntakesEntries || 0
         }
-      }
-    },
+      };
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = {
+        "message": err.message,
+      };
+    }
+  },
     async generateID(ctx) {
       try {
         const id = generateId();
@@ -172,7 +173,7 @@ async function avgWeightFromUsers() {
   }
 
   // 5. Berechne das Durchschnittsgewicht
-  return count > 0 ? totalWeight / count : 0;
+  return count > 0 ? totalWeight / count : 0.0;
 }
 
 async function avgDurationsFromUsers() {
@@ -198,7 +199,7 @@ async function avgDurationsFromUsers() {
     }
   }
 
-  return count > 0 ? totalTimerDuration / count : 0;
+  return count > 0 ? totalTimerDuration / count : 0.0;
 }
 
 async function avgMedicationsTimerFromUsers(totalMedication) {
