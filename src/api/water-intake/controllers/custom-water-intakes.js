@@ -85,7 +85,7 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
           });
 
           if (existingWaterIntake) {
-            weightData.id = existingWaterIntake.id;
+            waterIntakesData.id = existingWaterIntake.id;
 
             const updatedWaterIntake = await strapi.entityService.update('api::water-intake.water-intake', existingWaterIntake.id, {
               data: waterIntakeData
