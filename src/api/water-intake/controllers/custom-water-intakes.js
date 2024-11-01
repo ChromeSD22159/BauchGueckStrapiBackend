@@ -124,7 +124,7 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
                   waterIntakeId: waterIntakeData.waterIntakeId,
                   userId: waterIntakeData.userId
               },
-          });
+          }); 
 
           // 2. Wenn das gesendete WaterIntake gelöscht ist, dann soft delete in Strapi
           if (waterIntakeData.isDeleted) {
