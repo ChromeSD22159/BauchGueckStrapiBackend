@@ -31,16 +31,20 @@
       "type": "integer"
     },
     "protein": {
-      "type": "decimal"
+      "type": "decimal",
+      "default": 0.0
     },
     "fat": {
-      "type": "decimal"
+      "type": "decimal",
+      "default": 0.0
     },
     "sugar": {
-      "type": "decimal"
+      "type": "decimal",
+      "default": 0.0
     },
     "kcal": {
-      "type": "decimal"
+      "type": "decimal",
+      "default": 0.0
     },
     "isSnack": {
       "type": "boolean",

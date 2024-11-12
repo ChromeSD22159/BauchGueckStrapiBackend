@@ -32,6 +32,11 @@
     },
     "intakeTimeId": {
       "type": "string"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }

@@ -114,52 +114,65 @@ module.exports = createCoreController('api::water-intake.water-intake', ({ strap
     },
 
     async updateRemoteData(ctx) {
-        const waterIntakesFromApp = ctx.request.body;
-        const deletedWaterIntakes = [];
-
-        for (const waterIntakeData of waterIntakesFromApp) {
+      const waterIntakesFromApp = ctx.request.body;
+      const deletedWaterIntakes = [];
+  
+      for (const waterIntakeData of waterIntakesFromApp) {
+          // Entferne Felder, die nicht aktualisiert werden sollen
+          const { id, ...cleanData } = waterIntakeData;
+  
+          // Konvertiere notwendige Felder
+          cleanData.value = parseFloat(cleanData.value);
+          cleanData.updatedAtOnDevice = parseInt(cleanData.updatedAtOnDevice, 10); // Beispiel für Typanpassung
+  
           // 1. Suche nach einem vorhandenen WaterIntake
           let waterIntakeOrNull = await strapi.db.query('api::water-intake.water-intake').findOne({
               where: {
-                  waterIntakeId: waterIntakeData.waterIntakeId,
-                  userId: waterIntakeData.userId
+                  waterIntakeId: cleanData.waterIntakeId,
+                  userId: cleanData.userId
               },
-          }); 
-
+          });
+  
           // 2. Wenn das gesendete WaterIntake gelöscht ist, dann soft delete in Strapi
-          if (waterIntakeData.isDeleted) {
+          if (cleanData.isDeleted) {
               if (waterIntakeOrNull) {
                   // Soft delete durch Markierung von isDeleted auf true
                   await strapi.entityService.update('api::water-intake.water-intake', waterIntakeOrNull.id, {
-                    data: { isDeleted: true },
+                      data: { isDeleted: true },
                   });
-                  deletedWaterIntakes.push({ waterIntakeId: waterIntakeData.waterIntakeId, userId: waterIntakeData.userId });
+                  deletedWaterIntakes.push({
+                      waterIntakeId: cleanData.waterIntakeId,
+                      userId: cleanData.userId,
+                  });
               }
               continue;
           }
-
+  
           // 3. Wenn WaterIntake vorhanden, aktualisiere die Einträge
           if (waterIntakeOrNull) {
-              const floatValue = parseFloat(waterIntakeData.value);
               await strapi.db.query('api::water-intake.water-intake').update({
                   where: { id: waterIntakeOrNull.id },
-                  data: { ...waterIntakeData, value: floatValue, isDeleted: false }, // Aktualisieren, isDeleted zurücksetzen
+                  data: {
+                      ...cleanData,
+                      isDeleted: false, // Aktualisieren, isDeleted zurücksetzen
+                  },
               });
           } else {
               // 4. Wenn WaterIntake nicht vorhanden, erstelle einen neuen Eintrag
-              delete waterIntakeData.id
-              const floatValue = parseFloat(waterIntakeData.value);
               await strapi.db.query('api::water-intake.water-intake').create({
-                  data: { ...waterIntakeData, value: floatValue, isDeleted: false }, // Setze isDeleted auf false
+                  data: {
+                      ...cleanData,
+                      isDeleted: false, // Setze isDeleted auf false
+                  },
               });
           }
-        }
-
-        ctx.send({
+      }
+  
+      ctx.send({
           message: 'Sync completed successfully',
-          deletedWaterIntakes: deletedWaterIntakes
-        });
-    },
+          deletedWaterIntakes: deletedWaterIntakes,
+      });
+  },
 
     async fetchWaterIntakesAfterTimeStamp(ctx) {
       try {

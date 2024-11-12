@@ -13,15 +13,18 @@
   "pluginOptions": {},
   "attributes": {
     "userId": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "waterIntakeId": {
       "type": "string",
-      "default": "0"
+      "default": "0",
+      "required": true
     },
     "value": {
-      "type": "biginteger",
-      "default": "0"
+      "type": "decimal",
+      "default": 0.25,
+      "required": true
     },
     "isDeleted": {
       "type": "boolean",
@@ -30,7 +33,8 @@
     },
     "updatedAtOnDevice": {
       "type": "biginteger",
-      "required": true
+      "required": true,
+      "default": "0"
     }
   }
 }

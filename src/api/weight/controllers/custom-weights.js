@@ -13,6 +13,8 @@ module.exports = createCoreController('api::weight.weight', ({ strapi }) => ({
 
         const { weightId, userId, isDeleted } = receivedWeight;
 
+        console.log(receivedWeight.weighed)
+
         // Check if Entry Exist
         const existingEntry = await strapi.db.query('api::weight.weight').findOne({
           where: { weightId, userId }
